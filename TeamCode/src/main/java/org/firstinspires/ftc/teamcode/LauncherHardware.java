@@ -79,7 +79,6 @@ public class LauncherHardware {
     //Declare Vision Sensors/Objects/Activator
     public Boolean                  visionTrue          = true;
     public boolean                  visionActive;
-    public boolean                  visionFullyActive;
     public OpenGLMatrix             lastLocation        = null;
     public VuforiaLocalizer         vuforia             = null;
     public VuforiaLocalizer.Parameters     parameters   = null;
@@ -107,10 +106,9 @@ public class LauncherHardware {
     private ElapsedTime period  = new ElapsedTime();
 
     //Constructor
-    public LauncherHardware(boolean isAutonomous, boolean isHalfField){
+    public LauncherHardware(boolean isAutonomous){
 
         visionActive = isAutonomous;
-        visionFullyActive = !isHalfField;
 
     }
 
