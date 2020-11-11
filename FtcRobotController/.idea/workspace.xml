@@ -5,12 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e904b9c-03c8-460f-be1d-60d29cbbd2d3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/DrivableVision.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/LauncherHardware.java" beforeDir="false" afterPath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/LauncherHardware.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/TestingVisionTargetTrimming.java" beforeDir="false" afterPath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/TestingVisionTargetTrimming.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +65,9 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.17" />
@@ -75,7 +88,7 @@
       </method>
     </configuration>
     <configuration name="TeamCode" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="TeamCode" />
+      <module name="FtcRobotController.TeamCode" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -151,6 +164,10 @@
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
+    <state x="747" y="318" width="1100" height="700" key="#Gradle" timestamp="1605053913097">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="747" y="318" width="1100" height="700" key="#Gradle/0.0.1920.1040@0.0.1920.1040" timestamp="1605053913097" />
     <state x="381" y="383" key="#Notifications" timestamp="1604521120052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -171,6 +188,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1120" y="259" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602885157011" />
+    <state x="1077" y="409" key="FileChooserDialogImpl" timestamp="1605053910857">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1077" y="409" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605053910857" />
     <state x="54" y="41" key="SettingsEditor" timestamp="1605050782664">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -39,8 +39,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 public class LauncherHardware {
 
+
+    public boolean                  visionActive;
+    public boolean                  restActive;
+
     //Declare Drive Motors/Activator
-    public Boolean                  driveMotorsTrue     = false;
+    public Boolean                  driveMotorsTrue     = true;
     public DcMotor                  leftFront           = null;
     public DcMotor                  rightFront          = null;
     public DcMotor                  leftBack            = null;
@@ -72,13 +76,12 @@ public class LauncherHardware {
     public BNO055IMU                imu                 = null;
 
     //Declare Distance Sensors/Activator
-    public Boolean                  distanceTrue        = true;
-    public DistanceSensor           distanceScissor     = null;
+    public Boolean                  distanceTrue        = false;
+    public DistanceSensor           distanceSide        = null;
     public DistanceSensor           distanceFront       = null;
 
     //Declare Vision Sensors/Objects/Activator
     public Boolean                  visionTrue          = true;
-    public boolean                  visionActive;
     public OpenGLMatrix             lastLocation        = null;
     public VuforiaLocalizer         vuforia             = null;
     public VuforiaLocalizer.Parameters     parameters   = null;
@@ -106,10 +109,9 @@ public class LauncherHardware {
     private ElapsedTime period  = new ElapsedTime();
 
     //Constructor
-    public LauncherHardware(boolean isAutonomous){
-
-        visionActive = isAutonomous;
-
+    public LauncherHardware(boolean visionActive, boolean restActive){
+        this.visionActive = visionActive;
+        this.restActive = restActive;
     }
 
     //Initialize standard Hardware interfaces
@@ -118,131 +120,175 @@ public class LauncherHardware {
         //Save reference to Hardware map
         hwMap = ahwMap;
 
-        //Drive Motor Initialization
-        if(driveMotorsTrue){
+        if(restActive) {
+            //Drive Motor Initialization
+            if (driveMotorsTrue) {
 
-            //Get Drive Motors
-            leftFront = ahwMap.dcMotor.get("left_front");
-            rightFront = ahwMap.dcMotor.get("right_front");
-            leftBack = ahwMap.dcMotor.get("left_back");
-            rightBack = ahwMap.dcMotor.get("right_back");
+                //Get Drive Motors
+                leftFront = ahwMap.dcMotor.get("left_front");
+                rightFront = ahwMap.dcMotor.get("right_front");
+                leftBack = ahwMap.dcMotor.get("left_back");
+                rightBack = ahwMap.dcMotor.get("right_back");
 
-            //Reset Drive Motor Encoders
-            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                //Reset Drive Motor Encoders
+                leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            //Set Drive Motor Modes
-            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                //Set Drive Motor Modes
+                leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            //Set Drive Motor Directions
-            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+                //Set Drive Motor Directions
+                leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+                rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+                leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+                rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
-            //Set Drive Motor Powers
-            leftFront.setPower(0.0);
-            rightFront.setPower(0.0);
-            leftBack.setPower(0.0);
-            rightBack.setPower(0.0);
+                //Set Drive Motor Powers
+                leftFront.setPower(0.0);
+                rightFront.setPower(0.0);
+                leftBack.setPower(0.0);
+                rightBack.setPower(0.0);
 
+            }
+
+            //Launcher Motor Initialization
+            if (launcherDriveTrue) {
+
+                //Get Launcher Motors
+                launcher1 = ahwMap.dcMotor.get("launcher_1");
+                launcher2 = ahwMap.dcMotor.get("launcher_2");
+
+                //Reset Launcher Motor Encoders
+                launcher1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                launcher2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                //Set Launcher Motor Modes
+                launcher1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                launcher2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                //Set Launcher Motor Directions
+                launcher1.setDirection(DcMotorSimple.Direction.REVERSE);
+                launcher2.setDirection(DcMotorSimple.Direction.FORWARD);
+
+                //Set Launcher Motor Powers
+                launcher1.setPower(0.0);
+                launcher2.setPower(0.0);
+
+            }
+
+            //Grabber Motor Initialization
+            if (grabberTrue) {
+
+                //Get Grabber Motor
+                grabber = ahwMap.dcMotor.get("grabber");
+
+                //Reset Grabber Motor Encoder
+                grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                //Set Grabber Motor Mode
+                grabber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                //Set Grabber Motor Direction
+                grabber.setDirection(DcMotorSimple.Direction.FORWARD);
+
+                //Set Grabber Motor Power
+                grabber.setPower(0.0);
+
+            }
+
+            //Conveyor Motor Initialization
+            if (conveyorTrue) {
+
+                //Get Conveyor Motor
+                conveyor = ahwMap.dcMotor.get("conveyor");
+
+                //Reset Conveyor Motor Encoder
+                conveyor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                //Set Conveyor Motor Mode
+                conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                //Set Conveyor Motor Direction
+                conveyor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+                //Set Conveyor Motor Power
+                conveyor.setPower(0.0);
+
+            }
+
+            //Internal Measurement Unit Initialization
+            if (imuTrue) {
+
+                //Create and Get Internal Measurement Unit Parameters
+                BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+                parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+                parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+                parameters.loggingEnabled = true;
+                parameters.mode = BNO055IMU.SensorMode.IMU;
+                parameters.loggingTag = "IMU";
+                parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+                //Get Internal Measurement Unit
+                imu = ahwMap.get(BNO055IMU.class, "imu");
+
+                //Initialize Internal Measurement Unit with Parameters
+                imu.initialize(parameters);
+            }
+
+            //Distance Sensor Initialization
+            if (distanceTrue) {
+
+                //Get Distance Sensor
+                distanceSide = ahwMap.get(DistanceSensor.class, "distance_side");
+                distanceFront = ahwMap.get(DistanceSensor.class, "distance_front");
+
+            }
         }
 
-        //Launcher Motor Initialization
-        if(launcherDriveTrue){
+    }
 
-            //Get Launcher Motors
-            launcher1 = ahwMap.dcMotor.get("launcher_1");
-            launcher2 = ahwMap.dcMotor.get("launcher_2");
+    double[][] meccanumDrive(double leftY, double leftX, double rightX){
 
-            //Reset Launcher Motor Encoders
-            launcher1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            launcher2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        double[][] output = new double[3][4];
 
-            //Set Launcher Motor Modes
-            launcher1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            launcher2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //Change joystick input into speed, angle, and spin
+            output[1][0] = Math.sqrt((leftY * leftY) + (leftX * leftX));
+        output[1][0] = Math.atan2(leftX, -leftY);
+            double polarSpeen = -rightX / 2;
 
-            //Set Launcher Motor Directions
-            launcher1.setDirection(DcMotorSimple.Direction.REVERSE);
-            launcher2.setDirection(DcMotorSimple.Direction.FORWARD);
+            //Change speed, angle, and spin into power levels for the four drive motors
+            double leftFrontValue = polarSpeed * Math.sin(polarAngle + (Math.PI / 4)) + polarSpeen;
+            double rightFrontValue = polarSpeed * Math.cos(polarAngle + (Math.PI / 4)) - polarSpeen;
+            double leftBackValue = polarSpeed * Math.cos(polarAngle + (Math.PI / 4)) + polarSpeen;
+            double rightBackValue = polarSpeed * Math.sin(polarAngle + (Math.PI / 4)) - polarSpeen;
 
-            //Set Launcher Motor Powers
-            launcher1.setPower(0.0);
-            launcher2.setPower(0.0);
+            //Set maxValue to the absolute value of first power level
+            double maxValue = Math.abs(leftFrontValue);
 
-        }
+            //If the absolute value of the second power level is less than the maxValue, make it the new maxValue
+            if (Math.abs(rightFrontValue) > maxValue) {
+                maxValue = Math.abs(rightFrontValue);
+            }
 
-        //Grabber Motor Initialization
-        if(grabberTrue){
+            //If the absolute value of the third power level is less than the maxValue, make it the new maxValue
+            if (Math.abs(leftBackValue) > maxValue) {
+                maxValue = Math.abs(leftBackValue);
+            }
 
-            //Get Grabber Motor
-            grabber = ahwMap.dcMotor.get("grabber");
+            //If the absolute value of the fourth power level is less than the maxValue, make it the new maxValue
+            if (Math.abs(rightBackValue) > maxValue) {
+                maxValue = Math.abs(rightBackValue);
+            }
 
-            //Reset Grabber Motor Encoder
-            grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            //Set Grabber Motor Mode
-            grabber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //Set Grabber Motor Direction
-            grabber.setDirection(DcMotorSimple.Direction.FORWARD);
-
-            //Set Grabber Motor Power
-            grabber.setPower(0.0);
-
-        }
-
-        //Conveyor Motor Initialization
-        if(conveyorTrue){
-
-            //Get Conveyor Motor
-            conveyor = ahwMap.dcMotor.get("conveyor");
-
-            //Reset Conveyor Motor Encoder
-            conveyor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            //Set Conveyor Motor Mode
-            conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //Set Conveyor Motor Direction
-            conveyor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-            //Set Conveyor Motor Power
-            conveyor.setPower(0.0);
-
-        }
-
-        //Internal Measurement Unit Initialization
-        if(imuTrue){
-
-            //Create and Get Internal Measurement Unit Parameters
-            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-            parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-            parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-            parameters.loggingEnabled       = true;
-            parameters.mode                 = BNO055IMU.SensorMode.IMU;
-            parameters.loggingTag           = "IMU";
-            parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-            //Get Internal Measurement Unit
-            imu = ahwMap.get(BNO055IMU.class, "imu");
-
-            //Initialize Internal Measurement Unit with Parameters
-            imu.initialize(parameters);
-        }
-
-        //Distance Sensor Initialization
-        if(distanceTrue){
-
-            //Get Distance Sensor
-            distanceScissor = ahwMap.get(DistanceSensor.class, "distance_scissor");
-            distanceFront = ahwMap.get(DistanceSensor.class, "distance_front");
+            //Check if need to scale -- if not set maxValue to 1 to nullify scaling
+            if (maxValue < 1) {
+                maxValue = 1;
+            }
 
         }
 
