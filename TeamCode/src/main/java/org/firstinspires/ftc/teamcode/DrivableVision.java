@@ -17,10 +17,10 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 /*
  * NRG6762
  * Northwestern Regional 7 Gearheads
- * 2020-2021 Season - Skystone
+ * 2020-2021 Season - Ultimate Goal
  * Drivable Vision
  * Written by Aiden Maraia
- * Version: 11/10/2020
+ * Version: 11/13/2020
  * Feel free to make any changes and use at your disposal.
  */
 @TeleOp(name="Vision Drivable", group="Vision Testing")
