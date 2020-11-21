@@ -8,7 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e904b9c-03c8-460f-be1d-60d29cbbd2d3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/LauncherTeleOP.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/DrivableVision.java" beforeDir="false" afterPath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/DrivableVision.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/LauncherHardware.java" beforeDir="false" afterPath="$PROJECT_DIR$/../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/LauncherHardware.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +27,12 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/..">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -49,7 +58,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1iL9zrBGyXFTcTwIYji8xfZXEWE" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -70,7 +81,7 @@
       <recent name="org.firstinspires.ftc.teamcode" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.FtcRobotController">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -135,6 +146,32 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="FtcRobotController" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Android App.TeamCode" />
+      <item itemvalue="Gradle.FtcRobotController" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.FtcRobotController" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -155,6 +192,10 @@
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
+    <state x="669" y="122" key="#FtcRobotController" timestamp="1605661292452">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="669" y="122" key="#FtcRobotController/0.0.1920.1040@0.0.1920.1040" timestamp="1605661292452" />
     <state x="747" y="318" width="1100" height="700" key="#Gradle" timestamp="1605053913097">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -175,6 +216,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1031" y="212" key="#TeamCode/0.0.1920.1040@0.0.1920.1040" timestamp="1605049913409" />
+    <state x="-206" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1605661758271">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-206" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605661758271" />
     <state x="865" y="325" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1605655969949">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -187,22 +232,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="478" y="279" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605658552190" />
-    <state width="457" height="203" key="GridCell.Tab.0.bottom" timestamp="1605659019714">
+    <state width="914" height="281" key="GridCell.Tab.0.bottom" timestamp="1605662185406">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="457" height="203" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1605659019714" />
-    <state width="457" height="203" key="GridCell.Tab.0.center" timestamp="1605659019714">
+    <state width="914" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1605662185406" />
+    <state width="914" height="281" key="GridCell.Tab.0.center" timestamp="1605662185406">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="457" height="203" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1605659019714" />
-    <state width="457" height="203" key="GridCell.Tab.0.left" timestamp="1605659019714">
+    <state width="914" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1605662185406" />
+    <state width="914" height="281" key="GridCell.Tab.0.left" timestamp="1605662185406">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="457" height="203" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1605659019714" />
-    <state width="457" height="203" key="GridCell.Tab.0.right" timestamp="1605659019714">
+    <state width="914" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1605662185406" />
+    <state width="914" height="281" key="GridCell.Tab.0.right" timestamp="1605662185406">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="457" height="203" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1605659019714" />
+    <state width="914" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1605662185406" />
     <state x="495" y="60" key="SettingsEditor" timestamp="1605654952870">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

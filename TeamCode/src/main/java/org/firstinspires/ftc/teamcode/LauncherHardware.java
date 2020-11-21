@@ -361,7 +361,13 @@ public class LauncherHardware {
         //Check if need to scale -- if not set maxValue to 1 to nullify scaling
         if (output[1][3] < 1) output[1][3] = 1;
 
-        //Output all of the variables and values created (wheel power in [0])
+        //Apply the scale to the outputs for each wheel (final values)
+        output[0][0] = output[2][0] / output[1][3];
+        output[0][1] = output[2][1] / output[1][3];
+        output[0][2] = output[2][2] / output[1][3];
+        output[0][3] = output[2][3] / output[1][3];
+
+        //Output all of the variables and values created (usable wheel power in [0])
         return output;
 
     }

@@ -32,7 +32,8 @@ public class DrivableVision extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
 
     private float deadzone = 0.025f;
-    private boolean activator;
+    private boolean activatorA = true;
+    private boolean activatorB = true;
 
     @Override
     public void runOpMode() {
@@ -52,6 +53,7 @@ public class DrivableVision extends LinearOpMode{
         //Reset the game clock to zero in Start()
         runtime.reset();
 
+        //Activate the vision stuff
         robot.targetsUltimateGoal.activate();
 
         //Run until the end of the match (driver presses STOP)
@@ -61,6 +63,7 @@ public class DrivableVision extends LinearOpMode{
             gamepad1.setJoystickDeadzone(deadzone);
             gamepad2.setJoystickDeadzone(deadzone);
 
+            //Do the math to find the power for each of the wheels.
             double[][] drivePowah = robot.meccanumDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_y);
 
             //Send the scaled power levels to drive motors
@@ -69,42 +72,50 @@ public class DrivableVision extends LinearOpMode{
             robot.leftBack.setPower(drivePowah[0][2]);
             robot.rightBack.setPower(drivePowah[0][3]);
 
-            if(gamepad1.a && activator){
-                activator = false;
-            }else{
-                activator = true;
+            //Switch vision on or off using the A button
+            if(gamepad1.a && activatorA){
+                activatorB = !activatorB;
+                activatorA = false;
+            }else if(!gamepad1.a){
+                activatorA = true;
             }
 
-            robot.targetVisible = false;
-            for (VuforiaTrackable trackable : robot.allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-                    robot.targetVisible = true;
+            //Run Vision if it is requested
+            if(activatorB) {
 
-                    // getUpdatedRobotLocation() will return null if no new information is available since
-                    // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                    if (robotLocationTransform != null) {
-                        robot.lastLocation = robotLocationTransform;
+                //Check if a target, any target, is seen
+                robot.targetVisible = false;
+                for (VuforiaTrackable trackable : robot.allTrackables) {
+                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                        telemetry.addData("Visible Target", trackable.getName());
+                        robot.targetVisible = true;
+
+                        // getUpdatedRobotLocation() will return null if no new information is available since
+                        // the last time that call was made, or if the trackable is not currently visible.
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            robot.lastLocation = robotLocationTransform;
+                        }
+                        break;
                     }
-                    break;
                 }
+
+                // Provide feedback as to where the robot is located (if we know).
+                if (robot.targetVisible) {
+                    // express position (translation) of robot in inches.
+                    VectorF translation = robot.lastLocation.getTranslation();
+                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                            translation.get(0) / robot.mmPerInch, translation.get(1) / robot.mmPerInch, translation.get(2) / robot.mmPerInch);
+
+                    // express the rotation of the robot in degrees.
+                    Orientation rotation = Orientation.getOrientation(robot.lastLocation, EXTRINSIC, XYZ, DEGREES);
+                    telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                } else {
+                    telemetry.addData("Visible Target", "none");
+                }
+
             }
 
-            // Provide feedback as to where the robot is located (if we know).
-            if (robot.targetVisible) {
-                // express position (translation) of robot in inches.
-                VectorF translation = robot.lastLocation.getTranslation();
-                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / robot.mmPerInch, translation.get(1) / robot.mmPerInch, translation.get(2) / robot.mmPerInch);
-
-                // express the rotation of the robot in degrees.
-                Orientation rotation = Orientation.getOrientation(robot.lastLocation, EXTRINSIC, XYZ, DEGREES);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-            }
-            else {
-                telemetry.addData("Visible Target", "none");
-            }
             telemetry.update();
 
         }
