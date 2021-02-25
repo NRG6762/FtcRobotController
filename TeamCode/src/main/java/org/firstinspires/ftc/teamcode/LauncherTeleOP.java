@@ -66,8 +66,6 @@ public class LauncherTeleOP extends LinearOpMode{
             robot.leftBack.setPower(drivePowah[0][2]);
             robot.rightBack.setPower(drivePowah[0][3]);
 
-
-
             telemetry.update();
 
         }
