@@ -21,6 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class LauncherHardware {
     public OpenGLMatrix             robotFromCamera     = null;
     public List<VuforiaTrackable>   allTrackables       = null;
     public WebcamName               webcam              = null;
+    public TFObjectDetector         tfod                = null;
 
     //Declare Vision Variables
     public final float CAMERA_FORWARD_DISPLACEMENT      = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
@@ -109,6 +111,9 @@ public class LauncherHardware {
     public float phoneXRotate                           = 0;
     public float phoneYRotate                           = 0;
     public float phoneZRotate                           = 0;
+    public static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+    public static final String LABEL_FIRST_ELEMENT = "Quad";
+    public static final String LABEL_SECOND_ELEMENT = "Single";
 
     //Local OpMode Members
     HardwareMap hwMap           = null;
@@ -324,6 +329,15 @@ public class LauncherHardware {
             for (VuforiaTrackable trackable : allTrackables) {
                 ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
             }
+
+            int tfodMonitorViewId = ahwMap.appContext.getResources().getIdentifier(
+            "tfodMonitorViewId", "id", ahwMap.appContext.getPackageName());
+            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+            tfodParameters.minResultConfidence = 0.8f;
+            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+            tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+
+            tfod.setZoom(2.5, 16.0/9.0);
 
         }
 
