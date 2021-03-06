@@ -32,13 +32,13 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-/*
+/**
  * NRG6762
  * Northwestern Regional 7 Gearheads
  * 2020-2021 Season - Ultimate Goal
  * Hardware Class
  * Written by Aiden Maraia,
- * Version: 11/13/2020
+ * Version: 3/5/2020
  * Feel free to make any changes and use at your disposal.
  */
 public class LauncherHardware {
@@ -47,8 +47,8 @@ public class LauncherHardware {
     public boolean                  visionActive;
     public boolean                  restActive;
 
-    //Declare Drive Motors/Activator
-    public Boolean                  driveMotorsTrue     = true;
+    //Declare Drive Motors & Activator
+    public boolean                  driveMotorsTrue     = true;
     public DcMotor                  leftFront           = null;
     public DcMotor                  rightFront          = null;
     public DcMotor                  leftBack            = null;
@@ -59,28 +59,28 @@ public class LauncherHardware {
     public double                   ticksPerInchSide    = 70;
 
     //Declare Launcher Motors/Activator
-    public Boolean                  launcherDriveTrue   = false;
+    public boolean                  launcherDriveTrue   = false;
     public DcMotor                  launcher1           = null;
     public DcMotor                  launcher2           = null;
 
     //Declare Grabber Motors/Activator
-    public Boolean                  grabberTrue         = false;
+    public boolean                  grabberTrue         = false;
     public DcMotor                  grabber             = null;
 
     //Declare Conveyor Motors/Activator
-    public Boolean                  conveyorTrue        = false;
+    public boolean                  conveyorTrue        = false;
     public DcMotor                  conveyor            = null;
 
     //Declare Aimer Servo/Activator
-    public Boolean                  aimerTrue           = false;
+    public boolean                  aimerTrue           = false;
     public Servo                    aimer               = null;
 
     //Declare IMU/Activator
-    public Boolean                  imuTrue             = true;
+    public boolean                  imuTrue             = true;
     public BNO055IMU                imu                 = null;
 
     //Declare Distance Sensors/Activator
-    public Boolean                  distanceTrue        = false;
+    public boolean                  distanceTrue        = false;
     public DistanceSensor           distanceSide        = null;
     public DistanceSensor           distanceFront       = null;
 
@@ -96,24 +96,25 @@ public class LauncherHardware {
     public TFObjectDetector         tfod                = null;
 
     //Declare Vision Variables
+    //Digital Information
+    public static final String VUFORIA_KEY =
+            "AeBHpT//////AAABmVuiA5UnWEyfiHdkKh7y5HUKxtNnKfUiPUxg1EChNg5mayvOWsVPnnFMXk6p9NRq7PgxAocbY3kWK8ja1SriqRTf+rEFMVYu4uc8WmQzZz8KFG2o0ORG0xNRnHKhUC/ruCm1ochnmB8r8r2V4bb0+kdvTGeFqwGx3fca3Y+/tKRHECb9zx7Vb3fO1USHtxj4rWngJKrkhkhTQ/SaslJvYdM4iUdnB+uRDhujTOfHXZTLY9o+um4j9IellV4zjdnaBQ0dljrYVT8zKN+cgx142U70l5A+pT9Tove+h8w2X/P6mjheJ5ILqY0ZYgbpanOe5DN2HiwTkbBASxF735iiIQG8K0r4ZCOOaikMczWDelo8\n";
+    public static final String TFOD_MODEL_ASSET         = "UltimateGoal.tflite";
+    public static final String LABEL_FIRST_ELEMENT      = "Quad";
+    public static final String LABEL_SECOND_ELEMENT     = "Single";
+    public boolean targetVisible                        = false;
+    //Location Information
     public final float CAMERA_FORWARD_DISPLACEMENT      = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
     public final float CAMERA_VERTICAL_DISPLACEMENT     = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
     public final float CAMERA_LEFT_DISPLACEMENT         = 0;     // eg: Camera is ON the robot's center line
-    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    public static final boolean PHONE_IS_PORTRAIT       = false;
-    public static final String VUFORIA_KEY =
-            "AeBHpT//////AAABmVuiA5UnWEyfiHdkKh7y5HUKxtNnKfUiPUxg1EChNg5mayvOWsVPnnFMXk6p9NRq7PgxAocbY3kWK8ja1SriqRTf+rEFMVYu4uc8WmQzZz8KFG2o0ORG0xNRnHKhUC/ruCm1ochnmB8r8r2V4bb0+kdvTGeFqwGx3fca3Y+/tKRHECb9zx7Vb3fO1USHtxj4rWngJKrkhkhTQ/SaslJvYdM4iUdnB+uRDhujTOfHXZTLY9o+um4j9IellV4zjdnaBQ0dljrYVT8zKN+cgx142U70l5A+pT9Tove+h8w2X/P6mjheJ5ILqY0ZYgbpanOe5DN2HiwTkbBASxF735iiIQG8K0r4ZCOOaikMczWDelo8\n";
     public static final float mmPerInch                 = 25.4f;
     public static final float mmTargetHeight            = (6) * mmPerInch;
     public static final float halfField                 = 72 * mmPerInch;
     public static final float quadField                 = 36 * mmPerInch;
-    public boolean targetVisible                        = false;
-    public float phoneXRotate                           = 0;
-    public float phoneYRotate                           = 0;
-    public float phoneZRotate                           = 0;
-    public static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
-    public static final String LABEL_FIRST_ELEMENT = "Quad";
-    public static final String LABEL_SECOND_ELEMENT = "Single";
+    //TensorFlow Parameters
+    public static final float tfodConfidence            = 0.6f;
+    public static final double tfodMagnification        = 2.5;
+    public static final double tfodAspectRatio          = 16.0/9.0;
 
     //Local OpMode Members
     HardwareMap hwMap           = null;
@@ -131,8 +132,10 @@ public class LauncherHardware {
         //Save reference to Hardware map
         hwMap = ahwMap;
 
+        /** MOTORS & SENSORS */
         if(restActive) {
-            //Drive Motor Initialization
+
+            /** Drive Motor Initialization */
             if (driveMotorsTrue) {
 
                 //Get Drive Motors
@@ -167,7 +170,7 @@ public class LauncherHardware {
 
             }
 
-            //Launcher Motor Initialization
+            /** Launcher Motor Initialization */
             if (launcherDriveTrue) {
 
                 //Get Launcher Motors
@@ -192,7 +195,7 @@ public class LauncherHardware {
 
             }
 
-            //Grabber Motor Initialization
+            /** Grabber Motor Initialization */
             if (grabberTrue) {
 
                 //Get Grabber Motor
@@ -212,7 +215,7 @@ public class LauncherHardware {
 
             }
 
-            //Conveyor Motor Initialization
+            /** Conveyor Motor Initialization */
             if (conveyorTrue) {
 
                 //Get Conveyor Motor
@@ -232,7 +235,7 @@ public class LauncherHardware {
 
             }
 
-            //Internal Measurement Unit Initialization
+            /** IMU Initialization */
             if (imuTrue) {
 
                 //Create and Get Internal Measurement Unit Parameters
@@ -251,7 +254,7 @@ public class LauncherHardware {
                 imu.initialize(parameters);
             }
 
-            //Distance Sensor Initialization
+            /** Distance Sensor Initialization */
             if (distanceTrue) {
 
                 //Get Distance Sensor
@@ -262,17 +265,26 @@ public class LauncherHardware {
 
         }
 
+        /** VUFORIA & TENSORFLOW */
         if(visionTrue && visionActive){
 
+            /**Both*/
+
+            //Get Webcam
             webcam = ahwMap.get(WebcamName.class, "webcam");
 
+            //Retrieve and compile VuforiaLocalizer parameters
             parameters = new VuforiaLocalizer.Parameters(ahwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", ahwMap.appContext.getPackageName()));
             parameters.vuforiaLicenseKey = VUFORIA_KEY;
             parameters.cameraName = webcam;
             parameters.useExtendedTracking = false;
 
+            //Apply parameters to Vuforia object
             vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
+            /**Vuforia Only*/
+
+            //Load trackable Vuforia images
             targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
             VuforiaTrackable blueTowerGoalTarget = targetsUltimateGoal.get(0);
             blueTowerGoalTarget.setName("Blue Tower Goal Target");
@@ -285,66 +297,48 @@ public class LauncherHardware {
             VuforiaTrackable frontWallTarget = targetsUltimateGoal.get(4);
             frontWallTarget.setName("Front Wall Target");
 
-            // For convenience, gather together all the trackable objects in one easily-iterable collection */
+            //Consolidate all trackable objects into one object
             allTrackables = new ArrayList<VuforiaTrackable>();
             allTrackables.addAll(targetsUltimateGoal);
 
-            //Set the position of the perimeter targets with relation to origin (center of field)
-            redAllianceTarget.setLocation(OpenGLMatrix
-                    .translation(0, -halfField, mmTargetHeight)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
+            //Set perimeter target positions (from field origin)
+            redAllianceTarget.setLocation(OpenGLMatrix.translation(0, -halfField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
+            blueAllianceTarget.setLocation(OpenGLMatrix.translation(0, halfField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0)));
+            frontWallTarget.setLocation(OpenGLMatrix.translation(-halfField, 0, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
 
-            blueAllianceTarget.setLocation(OpenGLMatrix
-                    .translation(0, halfField, mmTargetHeight)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0)));
-            frontWallTarget.setLocation(OpenGLMatrix
-                    .translation(-halfField, 0, mmTargetHeight)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+            //Set tower goal target positions
+            blueTowerGoalTarget.setLocation(OpenGLMatrix.translation(halfField, quadField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+            redTowerGoalTarget.setLocation(OpenGLMatrix.translation(halfField, -quadField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
-            // The tower goal targets are located a quarter field length from the ends of the back perimeter wall.
-            blueTowerGoalTarget.setLocation(OpenGLMatrix
-                    .translation(halfField, quadField, mmTargetHeight)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
-            redTowerGoalTarget.setLocation(OpenGLMatrix
-                    .translation(halfField, -quadField, mmTargetHeight)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+            //Set webcam position on robot
+            robotFromCamera = OpenGLMatrix.translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT).multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, -90, 0, 0));
 
-            // We need to rotate the camera around it's long axis to bring the correct camera forward.
-            if (CAMERA_CHOICE == BACK) {
-                phoneYRotate = -90;
-            } else {
-                phoneYRotate = 90;
-            }
-
-            // Rotate the phone vertical about the X axis if it's in portrait mode
-            if (PHONE_IS_PORTRAIT) {
-                phoneXRotate = 90 ;
-            }
-
-            robotFromCamera = OpenGLMatrix
-                    .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
-
-            /**  Let all the trackable listeners know where the phone is.  */
+            //Let trackable listeners know phone location
             for (VuforiaTrackable trackable : allTrackables) {
                 ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
             }
 
-            int tfodMonitorViewId = ahwMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", ahwMap.appContext.getPackageName());
-            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfodParameters.minResultConfidence = 0.8f;
+            /**TensorFlow Only*/
+
+            //Create and set parameters for TensorFlow
+            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(ahwMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", ahwMap.appContext.getPackageName()));
+            tfodParameters.minResultConfidence = tfodConfidence;
+
+            //Create TensorFlow object from parameters
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+
+            //Load physical objects into TensorFlow object
             tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
 
-            tfod.setZoom(2.5, 16.0/9.0);
+            //Set TensorFlow camera zoom
+            tfod.setZoom(tfodMagnification, tfodAspectRatio);
 
         }
 
     }
 
-    //Algorithm for changing joystick input into mecannum values
-    double[][] meccanumDrive(double leftY, double leftX, double rightX){
+    /** Algorithm for changing joystick input into mecannum values */
+    double[][] meccanumDrive(double leftY, double leftX, double rightY){
 
         //Create 2D-array of all the values used
         double[][] output = new double[3][4];
@@ -352,7 +346,7 @@ public class LauncherHardware {
         //Change joystick input into speed, angle, and spin
         output[1][0] = Math.sqrt((leftY * leftY) + (leftX * leftX));
         output[1][1] = Math.atan2(leftX, -leftY);
-        output[1][2] = -rightX / 2;
+        output[1][2] = -rightY / 2;
 
         //Change speed, angle, and spin into power levels for the four drive motors
         output[2][0] = output[1][0] * Math.sin(output[1][1] + (Math.PI / 4)) + output[1][2];

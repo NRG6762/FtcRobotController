@@ -23,7 +23,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
  * 2020-2021 Season - Ultimate Goal
  * Drivable Vision
  * Written by Aiden Maraia
- * Version: 11/13/2020
+ * Version: 3/5/2020
  * Feel free to make any changes and use at your disposal.
  */
 @TeleOp(name="Vision Drivable", group="Vision Testing")
@@ -163,10 +163,15 @@ public class DrivableVision extends LinearOpMode{
                                 recognition.getRight(), recognition.getBottom());
                       }
                       telemetry.update();
+                    }else{
+                        telemetry.addLine("LIST NULL");
                     }
                 }
 
             }else{
+
+                telemetry.addLine("Vision: None Currently :)");
+
                 if (robot.tfod != null && firstTime) {
                     robot.tfod.shutdown();
                     firstTime = false;
