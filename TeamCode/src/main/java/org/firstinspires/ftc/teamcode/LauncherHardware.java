@@ -104,7 +104,7 @@ public class LauncherHardware {
     public static final String LABEL_SECOND_ELEMENT     = "Single";
     public boolean targetVisible                        = false;
     //Location Information
-    public final float CAMERA_FORWARD_DISPLACEMENT      = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+    public final float CAMERA_FORWARD_DISPLACEMENT      = 9.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
     public final float CAMERA_VERTICAL_DISPLACEMENT     = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
     public final float CAMERA_LEFT_DISPLACEMENT         = 0;     // eg: Camera is ON the robot's center line
     public static final float mmPerInch                 = 25.4f;
