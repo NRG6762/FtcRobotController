@@ -35,7 +35,7 @@ public class LauncherAutonomous extends LinearOpMode {
     private String stepVuforia = "On";
     private boolean firstVuforia = true;
 
-    private int ringFlag = 0;
+    private int ringNumber = 0;
 
     //Declare variables used only in this class
     private float deadzone = 0.025f;
@@ -59,23 +59,23 @@ public class LauncherAutonomous extends LinearOpMode {
         while(!isStarted()){
 
             if (robot.tfod != null) {
-                // getUpdatedRecognitions(+) will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = robot.tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    // step through the list of recognitions and display boundary info.
-                    int i = 0;
-                    for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                recognition.getRight(), recognition.getBottom());
+
+                List<Recognition> recognitions = robot.tfod.getRecognitions();
+                int maxRingNumber = 0;
+
+                if (recognitions != null) {
+                    for (Recognition recognition : recognitions) {
+                        int tempRingNumber = 0;
+                        if (recognition.getLabel().equals("Single")) {
+                            tempRingNumber = 1;
+                        }else if(recognition.getLabel().equals("Quad")){
+                            tempRingNumber = 4;
+                        }
+                        if(tempRingNumber > maxRingNumber) maxRingNumber = tempRingNumber;
                     }
-                }else{
-                    ringFlag = 0;
                 }
+
+                ringNumber = maxRingNumber;
             }
 
             //Update the telemetry

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
@@ -23,7 +24,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
  * 2020-2021 Season - Ultimate Goal
  * Drivable Vision
  * Written by Aiden Maraia
- * Version: 3/5/2020
+ * Version: 3/7/2020
  * Feel free to make any changes and use at your disposal.
  */
 @TeleOp(name="Vision Drivable", group="Vision Testing")
@@ -38,7 +39,7 @@ public class DrivableVision extends LinearOpMode{
     private float deadzone = 0.025f;
     private boolean activatorA = true;
     private int activatorB = 0;
-    private boolean firstTime = true;
+    private boolean firstTime = false;
 
     @Override
     public void runOpMode() {
@@ -60,6 +61,7 @@ public class DrivableVision extends LinearOpMode{
 
         //Activate the vision stuff
         robot.targetsUltimateGoal.activate();
+        if (robot.tfod != null) robot.tfod.activate();
 
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
@@ -93,12 +95,6 @@ public class DrivableVision extends LinearOpMode{
 
             //Run VuMark Tracking
             if(activatorB == 1) {
-
-                //Activate target tracking the first time through
-                if(firstTime) {
-                    robot.targetsUltimateGoal.activate();
-                    firstTime = false;
-                }
 
                 //Tell drive what mode vision is on
                 telemetry.addLine("Vision: VuMark ID");
@@ -137,34 +133,24 @@ public class DrivableVision extends LinearOpMode{
             //Run Object Tracking
             }else if(activatorB == 2){
 
-                //Activate target tracking the first time through
-                if(firstTime) {
-                    robot.targetsUltimateGoal.deactivate();
-                    if (robot.tfod != null) robot.tfod.activate();
-                    firstTime = false;
-                }
-
                 //Tell drive what mode vision is on
                 telemetry.addLine("Vision: Object ID");
 
                 if (robot.tfod != null) {
                     // getUpdatedRecognitions(+) will return null if no new information is available since
                     // the last time that call was made.
-                    List<Recognition> updatedRecognitions = robot.tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                      telemetry.addData("# Object Detected", updatedRecognitions.size());
-                      // step through the list of recognitions and display boundary info.
-                      int i = 0;
-                      for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                recognition.getRight(), recognition.getBottom());
-                      }
-                      telemetry.update();
-                    }else{
-                        telemetry.addLine("LIST NULL");
+                    List<Recognition> recognitions = robot.tfod.getRecognitions();
+                    if (recognitions != null) {
+                        telemetry.addData("# Object Detected", recognitions.size());
+                        // step through the list of recognitions and display boundary info.
+                        int i = 0;
+                        for (Recognition recognition : recognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
+                        }
                     }
                 }
 
@@ -172,10 +158,6 @@ public class DrivableVision extends LinearOpMode{
 
                 telemetry.addLine("Vision: None Currently :)");
 
-                if (robot.tfod != null && firstTime) {
-                    robot.tfod.shutdown();
-                    firstTime = false;
-                }
             }
 
             telemetry.update();

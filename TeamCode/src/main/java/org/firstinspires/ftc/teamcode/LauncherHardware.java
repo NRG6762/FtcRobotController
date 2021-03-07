@@ -38,7 +38,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * 2020-2021 Season - Ultimate Goal
  * Hardware Class
  * Written by Aiden Maraia,
- * Version: 3/5/2020
+ * Version: 3/7/2020
  * Feel free to make any changes and use at your disposal.
  */
 public class LauncherHardware {
@@ -112,7 +112,7 @@ public class LauncherHardware {
     public static final float halfField                 = 72 * mmPerInch;
     public static final float quadField                 = 36 * mmPerInch;
     //TensorFlow Parameters
-    public static final float tfodConfidence            = 0.6f;
+    public static final float tfodConfidence            = 0.5f;
     public static final double tfodMagnification        = 2.5;
     public static final double tfodAspectRatio          = 16.0/9.0;
 
