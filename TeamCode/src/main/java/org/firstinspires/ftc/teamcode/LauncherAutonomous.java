@@ -76,6 +76,8 @@ public class LauncherAutonomous extends LinearOpMode {
                 }
 
                 ringNumber = maxRingNumber;
+
+                telemetry.addData("Ring Number", ringNumber)
             }
 
             //Update the telemetry

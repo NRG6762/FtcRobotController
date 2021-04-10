@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -59,17 +60,24 @@ public class LauncherHardware {
     public double                   ticksPerInchSide    = 70;
 
     //Declare Launcher Motors/Activator
-    public boolean                  launcherDriveTrue   = false;
+    public boolean                  launcherDriveTrue   = true;
     public DcMotor                  launcher1           = null;
     public DcMotor                  launcher2           = null;
 
-    //Declare Grabber Motors/Activator
-    public boolean                  grabberTrue         = false;
-    public DcMotor                  grabber             = null;
+    //Declare Launcher Motor Values
+    public double                   maxRPM              = 0.8;
+    public double                   standbyRPM          = 0.2;
+    public double                   ticksPerRevolution  = 28;
+    public double                   gearbox             = 20;
 
     //Declare Conveyor Motors/Activator
     public boolean                  conveyorTrue        = false;
     public DcMotor                  conveyor            = null;
+
+    //Declare Aimer Servo/Activator
+    public boolean                  collectorTrue       = false;
+    public CRServo                  collector1          = null;
+    public CRServo                  collector2          = null;
 
     //Declare Aimer Servo/Activator
     public boolean                  aimerTrue           = false;
@@ -195,26 +203,6 @@ public class LauncherHardware {
 
             }
 
-            /** Grabber Motor Initialization */
-            if (grabberTrue) {
-
-                //Get Grabber Motor
-                grabber = ahwMap.dcMotor.get("grabber");
-
-                //Reset Grabber Motor Encoder
-                grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                //Set Grabber Motor Mode
-                grabber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                //Set Grabber Motor Direction
-                grabber.setDirection(DcMotorSimple.Direction.FORWARD);
-
-                //Set Grabber Motor Power
-                grabber.setPower(0.0);
-
-            }
-
             /** Conveyor Motor Initialization */
             if (conveyorTrue) {
 
@@ -232,6 +220,23 @@ public class LauncherHardware {
 
                 //Set Conveyor Motor Power
                 conveyor.setPower(0.0);
+
+            }
+
+            /** Collector Servo Initialization */
+            if (collectorTrue) {
+
+                //Get Collector Servo
+                collector1 = ahwMap.crservo.get("collector_1");
+                collector2 = ahwMap.crservo.get("collector_2");
+
+                //Set Collector Servo Direction
+                collector1.setDirection(DcMotorSimple.Direction.FORWARD);
+                collector2.setDirection(DcMotorSimple.Direction.REVERSE);
+
+                //Set Collector Servo Power
+                collector1.setPower(0.0);
+                collector2.setPower(0.0);
 
             }
 
@@ -378,6 +383,45 @@ public class LauncherHardware {
         //Output all of the variables and values created (usable wheel power in [0])
         return output;
 
+    }
+
+    void autoMeccanumDrive(double speed, double direction, double spin){
+
+        double drive1 = speed * Math.sin(direction + (Math.PI/4)) + spin;
+        double drive2 = speed * Math.cos(direction + (Math.PI/4)) - spin;
+        double drive3 = speed * Math.cos(direction + (Math.PI/4)) + spin;
+        double drive4 = speed * Math.sin(direction + (Math.PI/4)) - spin;
+
+        //Set maxValue to the absolute value of first power level
+        double scale = Math.abs(drive1);
+
+        //If the absolute value of the second power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive2) > scale) scale = Math.abs(drive2);
+
+        //If the absolute value of the third power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive3) > scale) scale = Math.abs(drive3);
+
+        //If the absolute value of the fourth power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive4) > scale) scale = Math.abs(drive4);
+
+        //Check if need to scale -- if not set maxValue to 1 to nullify scaling
+        if (scale < 1) scale = 1;
+
+        //Apply the scale to the outputs for each wheel (final values)
+        leftFront.setPower(drive1/scale);
+        rightFront.setPower(drive2/scale);
+        leftBack.setPower(drive3/scale);
+        rightBack.setPower(drive4/scale);
+
+    }
+
+    double launcherRPM(double pastTicks, double currTicks, double pastTime, double currTime){
+        return ((currTicks - pastTicks) / (ticksPerRevolution / gearbox)) / ((currTime - pastTime) / 60000);
+    }
+
+    void launcherSpeed(double speed){
+        launcher1.setPower(speed);
+        launcher2.setPower(speed);
     }
 
 }

@@ -33,6 +33,8 @@ public class LauncherTeleOP extends LinearOpMode{
 
     private float deadzone = 0.025f;
 
+    double[][] launcherNumbers = new double[3][2];
+
     @Override
     public void runOpMode() {
 
@@ -51,6 +53,10 @@ public class LauncherTeleOP extends LinearOpMode{
         //Reset the game clock to zero in Start()
         runtime.reset();
 
+        launcherNumbers[0][0] = runtime.milliseconds();
+        launcherNumbers[1][0] = robot.launcher1.getCurrentPosition();
+        launcherNumbers[2][0] = robot.launcher2.getCurrentPosition();
+
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
@@ -65,6 +71,15 @@ public class LauncherTeleOP extends LinearOpMode{
             robot.rightFront.setPower(drivePowah[0][1]);
             robot.leftBack.setPower(drivePowah[0][2]);
             robot.rightBack.setPower(drivePowah[0][3]);
+
+            launcherNumbers[0][1] = runtime.milliseconds();
+            launcherNumbers[1][1] = robot.launcher1.getCurrentPosition();
+            launcherNumbers[2][1] = robot.launcher2.getCurrentPosition();
+
+
+
+            telemetry.addData("Launcher 1 RPM", robot.launcherRPM(launcherNumbers[1][0], launcherNumbers[1][1], launcherNumbers[0][0], launcherNumbers[0][1]));
+            telemetry.addData("Launcher 2 RPM", robot.launcherRPM(launcherNumbers[2][0], launcherNumbers[2][1], launcherNumbers[0][0], launcherNumbers[0][1]));
 
             telemetry.update();
 
