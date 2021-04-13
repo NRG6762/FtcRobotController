@@ -14,26 +14,24 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
-/*
+/**
  * NRG6762
  * Northwestern Regional 7 Gearheads
  * 2020-2021 Season - Ultimate Goal
- * Drivable Vision
+ * Launcher TeleOP
  * Written by Aiden Maraia
- * Version: 11/13/2020
+ * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@TeleOp(name="Vision Drivable", group="Vision Testing")
+@TeleOp(name="Launcher P", group="@Competition")
 //@Disabled
 public class LauncherTeleOP extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(false, true);
+    private LauncherHardware robot = new LauncherHardware(false, true, 100);
 
     private ElapsedTime runtime = new ElapsedTime();
 
     private float deadzone = 0.025f;
-
-    double[][] launcherNumbers = new double[3][2];
 
     @Override
     public void runOpMode() {
@@ -53,10 +51,6 @@ public class LauncherTeleOP extends LinearOpMode{
         //Reset the game clock to zero in Start()
         runtime.reset();
 
-        launcherNumbers[0][0] = runtime.milliseconds();
-        launcherNumbers[1][0] = robot.launcher1.getCurrentPosition();
-        launcherNumbers[2][0] = robot.launcher2.getCurrentPosition();
-
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
@@ -72,14 +66,10 @@ public class LauncherTeleOP extends LinearOpMode{
             robot.leftBack.setPower(drivePowah[0][2]);
             robot.rightBack.setPower(drivePowah[0][3]);
 
-            launcherNumbers[0][1] = runtime.milliseconds();
-            launcherNumbers[1][1] = robot.launcher1.getCurrentPosition();
-            launcherNumbers[2][1] = robot.launcher2.getCurrentPosition();
+            double[] rpm = robot.launcherRPM(runtime.milliseconds());
 
-
-
-            telemetry.addData("Launcher 1 RPM", robot.launcherRPM(launcherNumbers[1][0], launcherNumbers[1][1], launcherNumbers[0][0], launcherNumbers[0][1]));
-            telemetry.addData("Launcher 2 RPM", robot.launcherRPM(launcherNumbers[2][0], launcherNumbers[2][1], launcherNumbers[0][0], launcherNumbers[0][1]));
+            telemetry.addData("Launcher 1 RPM", rpm[1]);
+            telemetry.addData("Launcher 2 RPM", rpm[2]);
 
             telemetry.update();
 

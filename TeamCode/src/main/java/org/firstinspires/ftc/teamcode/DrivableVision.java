@@ -18,20 +18,20 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
-/*
+/**
  * NRG6762
  * Northwestern Regional 7 Gearheads
  * 2020-2021 Season - Ultimate Goal
- * Drivable Vision
+ * Testing Drivable Vision
  * Written by Aiden Maraia
- * Version: 3/7/2020
+ * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@TeleOp(name="Vision Drivable", group="Vision Testing")
+@TeleOp(name="Vision Drivable", group="@Testing")
 //@Disabled
 public class DrivableVision extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(true, true);
+    private LauncherHardware robot = new LauncherHardware(true, true, 100);
 
     private ElapsedTime runtime = new ElapsedTime();
 

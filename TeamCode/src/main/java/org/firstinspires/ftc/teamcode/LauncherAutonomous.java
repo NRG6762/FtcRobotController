@@ -1,47 +1,44 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
+import java.nio.DoubleBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * NRG6762
  * Northwestern Regional 7 Gearheads
  * 2020-2021 Season - Ultimate Goal
  * Launcher Autonomous
  * Written by Aiden Maraia
- * Version: 3/7/2020
+ * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@Autonomous(name="Launcher Autonomous", group="Autonomous")
+//@Autonomous(name="Launcher Autonomous", group="Autonomous")
 //@Disabled
-public class LauncherAutonomous extends LinearOpMode {
+public abstract class LauncherAutonomous extends LinearOpMode {
 
-    private LauncherHardware robot = new LauncherHardware(true, true);
-    private ElapsedTime runtime = new ElapsedTime();
+    LauncherHardware robot = new LauncherHardware(true, true, 100);
+    ElapsedTime runtime = new ElapsedTime();
 
-    private String stepMove = "To Goal Line";
-    private boolean firstMove = true;
-    private String stepShoot = "Up To Speed";
-    private boolean firstShoot = true;
-    private String stepCollect = "Off";
-    private boolean firstCollect = true;
-    private String stepGrab = "Off";
-    private boolean firstGrab = true;
-    private String stepVuforia = "On";
-    private boolean firstVuforia = true;
+    String stepMove = "To Goal Line";
+    boolean firstMove = true;
+    String stepShoot = "Up To Speed";
+    boolean firstShoot = true;
+    String stepCollect = "Off";
+    boolean firstCollect = true;
+    String stepGrab = "Off";
+    boolean firstGrab = true;
+    String stepVuforia = "On";
+    boolean firstVuforia = true;
 
-    private int ringNumber = 0;
-
-    //Declare variables used only in this class
-    private float deadzone = 0.025f;
-    private boolean activatorA = true;
-    private int activatorB = 0;
-    private boolean firstTime = true;
+    int ringNumber = 0;
 
     @Override
     public void runOpMode() {
@@ -77,7 +74,7 @@ public class LauncherAutonomous extends LinearOpMode {
 
                 ringNumber = maxRingNumber;
 
-                telemetry.addData("Ring Number", ringNumber)
+                telemetry.addData("Ring Number", ringNumber);
             }
 
             //Update the telemetry
@@ -96,23 +93,29 @@ public class LauncherAutonomous extends LinearOpMode {
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
-            //
-            switch (stepMove) {
-            }
+            double[] rpm = robot.launcherRPM(runtime.milliseconds());
 
-            switch (stepShoot) {
-            }
-
-            switch (stepCollect) {
-            }
-
-            switch (stepGrab) {
-            }
-
-            switch (stepVuforia) {
-            }
+            loopBody();
 
         }
 
     }
+
+    public void loopBody(){
+        switch (stepMove) {
+        }
+
+        switch (stepShoot) {
+        }
+
+        switch (stepCollect) {
+        }
+
+        switch (stepGrab) {
+        }
+
+        switch (stepVuforia) {
+        }
+    }
+
 }

@@ -24,6 +24,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.nio.Buffer;
+import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +41,15 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * 2020-2021 Season - Ultimate Goal
  * Hardware Class
  * Written by Aiden Maraia,
- * Version: 3/7/2020
+ * Version: 4/12/2020
  * Feel free to make any changes and use at your disposal.
  */
 public class LauncherHardware {
 
-    //Global Activators
+    //Global Activators/Variables
     public boolean                  visionActive;
     public boolean                  restActive;
+    public double                   bufferSize;
 
     //Declare Drive Motors & Activator
     public boolean                  driveMotorsTrue     = true;
@@ -63,6 +66,9 @@ public class LauncherHardware {
     public boolean                  launcherDriveTrue   = true;
     public DcMotor                  launcher1           = null;
     public DcMotor                  launcher2           = null;
+
+    //Declare Launcher Motors Variables
+    public ArrayList<Double>[]      rpmBuffer           = null;
 
     //Declare Launcher Motor Values
     public double                   maxRPM              = 0.8;
@@ -129,9 +135,10 @@ public class LauncherHardware {
     private ElapsedTime period  = new ElapsedTime();
 
     //Constructor
-    public LauncherHardware(boolean visionActive, boolean restActive){
+    public LauncherHardware(boolean visionActive, boolean restActive, double bufferSize){
         this.visionActive = visionActive;
         this.restActive = restActive;
+        this.bufferSize = bufferSize;
     }
 
     //Initialize standard Hardware interfaces
@@ -200,6 +207,9 @@ public class LauncherHardware {
                 //Set Launcher Motor Powers
                 launcher1.setPower(0.0);
                 launcher2.setPower(0.0);
+
+                //Initialize Launcher Variable
+                rpmBuffer = new ArrayList[3];
 
             }
 
@@ -415,7 +425,29 @@ public class LauncherHardware {
 
     }
 
-    double launcherRPM(double pastTicks, double currTicks, double pastTime, double currTime){
+    double[] launcherRPM(double currTime){
+
+        rpmBuffer[0].add(currTime);
+        rpmBuffer[1].add((double) launcher1.getCurrentPosition());
+        rpmBuffer[2].add((double) launcher2.getCurrentPosition());
+
+        double launcher1RPM;
+        double launcher2RPM;
+        double pastTime = rpmBuffer[0].remove(0);
+
+        if(currTime >= bufferSize){
+            launcher1RPM = launcherRPMCalc(rpmBuffer[1].remove(0), (double) launcher1.getCurrentPosition(), pastTime, currTime);
+            launcher2RPM = launcherRPMCalc(rpmBuffer[2].remove(0), (double) launcher2.getCurrentPosition(), pastTime, currTime);
+        }else{
+            launcher1RPM = -1;
+            launcher2RPM = -1;
+        }
+
+        return new double[]{currTime - pastTime, launcher1RPM, launcher2RPM};
+
+    }
+
+    private double launcherRPMCalc(double pastTicks, double currTicks, double pastTime, double currTime){
         return ((currTicks - pastTicks) / (ticksPerRevolution / gearbox)) / ((currTime - pastTime) / 60000);
     }
 
