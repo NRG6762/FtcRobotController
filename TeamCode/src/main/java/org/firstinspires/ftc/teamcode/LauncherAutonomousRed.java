@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@Autonomous(name="Launcher Autonomous Red 1", group="@Competition")
+//@Autonomous(name="Launcher Autonomous Red 1", group="@Competition")
 //@Disabled
 public class LauncherAutonomousRed extends LauncherAutonomous {
 

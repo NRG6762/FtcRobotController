@@ -23,11 +23,11 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
  * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@TeleOp(name="Launcher P", group="@Competition")
+@TeleOp(name="Launcher TeleOP", group="@Competition")
 //@Disabled
 public class LauncherTeleOP extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(false, true, 100);
+    private LauncherHardware robot = new LauncherHardware(false, true, true, true, true, false, true, false, 100);
 
     private ElapsedTime runtime = new ElapsedTime();
 

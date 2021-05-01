@@ -17,9 +17,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //@Disabled
 public class TestingLauncherSpeed extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(false, true, 100);
+    private LauncherHardware robot = new LauncherHardware(false, false, true, true, false, false, false, false, 100);
 
     private ElapsedTime runtime = new ElapsedTime();
+
 
     private boolean newButton = true;
     private double speed = 0;
@@ -83,10 +84,20 @@ public class TestingLauncherSpeed extends LinearOpMode{
 
             double[] rpm = robot.launcherRPM(runtime.milliseconds());
 
+            telemetry.addData("Launcher 1 Position", robot.launcher1.getCurrentPosition());
+            telemetry.addData("Launcher 2 Position", robot.launcher2.getCurrentPosition());
             telemetry.addData("Place", place[index]);
             telemetry.addData("Launcher Speed", speed);
+            telemetry.addData("RPM Buffer Time", rpm[0]);
             telemetry.addData("Launcher 1 RPM", rpm[1]);
             telemetry.addData("Launcher 2 RPM", rpm[2]);
+
+            if(gamepad1.right_stick_y < 1 || gamepad1.right_stick_y < -1){
+                robot.conveyor.setPower(gamepad1.right_stick_y);
+            }
+
+            telemetry.addData("conveyor Position", robot.conveyor.getCurrentPosition());
+            telemetry.addData("Conveyor Speed", gamepad1.right_stick_y);
 
             telemetry.update();
 

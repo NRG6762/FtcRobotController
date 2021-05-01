@@ -48,7 +48,13 @@ public class LauncherHardware {
 
     //Global Activators/Variables
     public boolean                  visionActive;
-    public boolean                  restActive;
+    public boolean                  driveActive;
+    public boolean                  launcherActive;
+    public boolean                  conveyorActive;
+    public boolean                  collectorActive;
+    public boolean                  aimerActive;
+    public boolean                  IMUActive;
+    public boolean                  distanceActive;
     public double                   bufferSize;
 
     //Declare Drive Motors & Activator
@@ -68,16 +74,16 @@ public class LauncherHardware {
     public DcMotor                  launcher2           = null;
 
     //Declare Launcher Motors Variables
-    public ArrayList<Double>[]      rpmBuffer           = null;
+    public ArrayList[]              rpmBuffer;
 
     //Declare Launcher Motor Values
     public double                   maxRPM              = 0.8;
     public double                   standbyRPM          = 0.2;
     public double                   ticksPerRevolution  = 28;
-    public double                   gearbox             = 20;
+    public double                   gearbox             = 1;
 
     //Declare Conveyor Motors/Activator
-    public boolean                  conveyorTrue        = false;
+    public boolean                  conveyorTrue        = true;
     public DcMotor                  conveyor            = null;
 
     //Declare Aimer Servo/Activator
@@ -135,153 +141,157 @@ public class LauncherHardware {
     private ElapsedTime period  = new ElapsedTime();
 
     //Constructor
-    public LauncherHardware(boolean visionActive, boolean restActive, double bufferSize){
+    public LauncherHardware(boolean visionActive, boolean driveActive, boolean launcherActive, boolean conveyorActive, boolean collectorActive, boolean aimerActive, boolean IMUActive, boolean distanceActive, double bufferSize){
         this.visionActive = visionActive;
-        this.restActive = restActive;
+        this.driveActive = driveActive;
+        this.launcherActive = launcherActive;
+        this.conveyorActive = conveyorActive;
+        this.collectorActive = collectorActive;
+        this.aimerActive = aimerActive;
+        this.IMUActive = IMUActive;
+        this.distanceActive = distanceActive;
         this.bufferSize = bufferSize;
     }
 
     //Initialize standard Hardware interfaces
-    public void init(HardwareMap ahwMap){
+    public void init(HardwareMap ahwMap) {
 
         //Save reference to Hardware map
         hwMap = ahwMap;
 
-        /** MOTORS & SENSORS */
-        if(restActive) {
+        /** Drive Motor Initialization */
+        if (driveMotorsTrue && driveActive) {
 
-            /** Drive Motor Initialization */
-            if (driveMotorsTrue) {
+            //Get Drive Motors
+            leftFront = ahwMap.dcMotor.get("left_front");
+            rightFront = ahwMap.dcMotor.get("right_front");
+            leftBack = ahwMap.dcMotor.get("left_back");
+            rightBack = ahwMap.dcMotor.get("right_back");
 
-                //Get Drive Motors
-                leftFront = ahwMap.dcMotor.get("left_front");
-                rightFront = ahwMap.dcMotor.get("right_front");
-                leftBack = ahwMap.dcMotor.get("left_back");
-                rightBack = ahwMap.dcMotor.get("right_back");
+            //Reset Drive Motor Encoders
+            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                //Reset Drive Motor Encoders
-                leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //Set Drive Motor Modes
+            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                //Set Drive Motor Modes
-                leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //Set Drive Motor Directions
+            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
-                //Set Drive Motor Directions
-                leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-                rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-                leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-                rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+            //Set Drive Motor Powers
+            leftFront.setPower(0.0);
+            rightFront.setPower(0.0);
+            leftBack.setPower(0.0);
+            rightBack.setPower(0.0);
 
-                //Set Drive Motor Powers
-                leftFront.setPower(0.0);
-                rightFront.setPower(0.0);
-                leftBack.setPower(0.0);
-                rightBack.setPower(0.0);
+        }
 
-            }
+        /** Launcher Motor Initialization */
+        if (launcherDriveTrue && launcherActive) {
 
-            /** Launcher Motor Initialization */
-            if (launcherDriveTrue) {
+            //Get Launcher Motors
+            launcher1 = ahwMap.dcMotor.get("launcher_1");
+            launcher2 = ahwMap.dcMotor.get("launcher_2");
 
-                //Get Launcher Motors
-                launcher1 = ahwMap.dcMotor.get("launcher_1");
-                launcher2 = ahwMap.dcMotor.get("launcher_2");
+            //Reset Launcher Motor Encoders
+            launcher1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            launcher2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                //Reset Launcher Motor Encoders
-                launcher1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                launcher2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //Set Launcher Motor Modes
+            launcher1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            launcher2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                //Set Launcher Motor Modes
-                launcher1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                launcher2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //Set Launcher Motor Directions
+            launcher1.setDirection(DcMotorSimple.Direction.FORWARD);
+            launcher2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-                //Set Launcher Motor Directions
-                launcher1.setDirection(DcMotorSimple.Direction.REVERSE);
-                launcher2.setDirection(DcMotorSimple.Direction.FORWARD);
+            //Set Launcher Motor Powers
+            launcher1.setPower(0.0);
+            launcher2.setPower(0.0);
 
-                //Set Launcher Motor Powers
-                launcher1.setPower(0.0);
-                launcher2.setPower(0.0);
+            //Initialize Launcher Variable
+            rpmBuffer = new ArrayList[3];
+            rpmBuffer[0] = new ArrayList();
+            rpmBuffer[1] = new ArrayList();
+            rpmBuffer[2] = new ArrayList();
 
-                //Initialize Launcher Variable
-                rpmBuffer = new ArrayList[3];
+        }
 
-            }
+        /** Conveyor Motor Initialization */
+        if (conveyorTrue && conveyorActive) {
 
-            /** Conveyor Motor Initialization */
-            if (conveyorTrue) {
+            //Get Conveyor Motor
+            conveyor = ahwMap.dcMotor.get("conveyor");
 
-                //Get Conveyor Motor
-                conveyor = ahwMap.dcMotor.get("conveyor");
+            //Reset Conveyor Motor Encoder
+            conveyor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-                //Reset Conveyor Motor Encoder
-                conveyor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //Set Conveyor Motor Mode
+            conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                //Set Conveyor Motor Mode
-                conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //Set Conveyor Motor Direction
+            conveyor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-                //Set Conveyor Motor Direction
-                conveyor.setDirection(DcMotorSimple.Direction.FORWARD);
+            //Set Conveyor Motor Power
+            //conveyor.setPower(0.0);
 
-                //Set Conveyor Motor Power
-                conveyor.setPower(0.0);
+        }
 
-            }
+        /** Collector Servo Initialization */
+        if (collectorTrue && collectorActive) {
 
-            /** Collector Servo Initialization */
-            if (collectorTrue) {
+            //Get Collector Servo
+            collector1 = ahwMap.crservo.get("collector_1");
+            collector2 = ahwMap.crservo.get("collector_2");
 
-                //Get Collector Servo
-                collector1 = ahwMap.crservo.get("collector_1");
-                collector2 = ahwMap.crservo.get("collector_2");
+            //Set Collector Servo Direction
+            collector1.setDirection(DcMotorSimple.Direction.FORWARD);
+            collector2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-                //Set Collector Servo Direction
-                collector1.setDirection(DcMotorSimple.Direction.FORWARD);
-                collector2.setDirection(DcMotorSimple.Direction.REVERSE);
+            //Set Collector Servo Power
+            collector1.setPower(0.0);
+            collector2.setPower(0.0);
 
-                //Set Collector Servo Power
-                collector1.setPower(0.0);
-                collector2.setPower(0.0);
+        }
 
-            }
+        /** IMU Initialization */
+        if (imuTrue && IMUActive) {
 
-            /** IMU Initialization */
-            if (imuTrue) {
+            //Create and Get Internal Measurement Unit Parameters
+            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+            parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+            parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+            parameters.loggingEnabled = true;
+            parameters.mode = BNO055IMU.SensorMode.IMU;
+            parameters.loggingTag = "IMU";
+            parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-                //Create and Get Internal Measurement Unit Parameters
-                BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-                parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-                parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-                parameters.loggingEnabled = true;
-                parameters.mode = BNO055IMU.SensorMode.IMU;
-                parameters.loggingTag = "IMU";
-                parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+            //Get Internal Measurement Unit
+            imu = ahwMap.get(BNO055IMU.class, "imu");
 
-                //Get Internal Measurement Unit
-                imu = ahwMap.get(BNO055IMU.class, "imu");
+            //Initialize Internal Measurement Unit with Parameters
+            imu.initialize(parameters);
+        }
 
-                //Initialize Internal Measurement Unit with Parameters
-                imu.initialize(parameters);
-            }
+        /** Distance Sensor Initialization */
+        if (distanceTrue && distanceActive) {
 
-            /** Distance Sensor Initialization */
-            if (distanceTrue) {
-
-                //Get Distance Sensor
-                distanceSide = ahwMap.get(DistanceSensor.class, "distance_side");
-                distanceFront = ahwMap.get(DistanceSensor.class, "distance_front");
-
-            }
+            //Get Distance Sensor
+            distanceSide = ahwMap.get(DistanceSensor.class, "distance_side");
+            distanceFront = ahwMap.get(DistanceSensor.class, "distance_front");
 
         }
 
         /** VUFORIA & TENSORFLOW */
-        if(visionTrue && visionActive){
+        if (visionTrue && visionActive) {
 
             /**Both*/
 
@@ -319,10 +329,10 @@ public class LauncherHardware {
             //Set perimeter target positions (from field origin)
             redAllianceTarget.setLocation(OpenGLMatrix.translation(0, -halfField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
             blueAllianceTarget.setLocation(OpenGLMatrix.translation(0, halfField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0)));
-            frontWallTarget.setLocation(OpenGLMatrix.translation(-halfField, 0, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+            frontWallTarget.setLocation(OpenGLMatrix.translation(-halfField, 0, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
             //Set tower goal target positions
-            blueTowerGoalTarget.setLocation(OpenGLMatrix.translation(halfField, quadField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+            blueTowerGoalTarget.setLocation(OpenGLMatrix.translation(halfField, quadField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
             redTowerGoalTarget.setLocation(OpenGLMatrix.translation(halfField, -quadField, mmTargetHeight).multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
             //Set webcam position on robot
@@ -349,7 +359,6 @@ public class LauncherHardware {
             tfod.setZoom(tfodMagnification, tfodAspectRatio);
 
         }
-
     }
 
     /** Algorithm for changing joystick input into mecannum values */
@@ -425,7 +434,7 @@ public class LauncherHardware {
 
     }
 
-    double[] launcherRPM(double currTime){
+    public double[] launcherRPM(double currTime){
 
         rpmBuffer[0].add(currTime);
         rpmBuffer[1].add((double) launcher1.getCurrentPosition());
@@ -433,11 +442,12 @@ public class LauncherHardware {
 
         double launcher1RPM;
         double launcher2RPM;
-        double pastTime = rpmBuffer[0].remove(0);
+        double pastTime = (double)rpmBuffer[0].get(0);
 
-        if(currTime >= bufferSize){
-            launcher1RPM = launcherRPMCalc(rpmBuffer[1].remove(0), (double) launcher1.getCurrentPosition(), pastTime, currTime);
-            launcher2RPM = launcherRPMCalc(rpmBuffer[2].remove(0), (double) launcher2.getCurrentPosition(), pastTime, currTime);
+        if(rpmBuffer[0].size() >= bufferSize){
+            rpmBuffer[0].remove(0);
+            launcher1RPM = launcherRPMCalc((double)rpmBuffer[1].remove(0), launcher1.getCurrentPosition(), pastTime, currTime);
+            launcher2RPM = launcherRPMCalc((double)rpmBuffer[2].remove(0), launcher2.getCurrentPosition(), pastTime, currTime);
         }else{
             launcher1RPM = -1;
             launcher2RPM = -1;

@@ -24,7 +24,7 @@ import java.util.List;
 //@Disabled
 public abstract class LauncherAutonomous extends LinearOpMode {
 
-    LauncherHardware robot = new LauncherHardware(true, true, 100);
+    LauncherHardware robot = new LauncherHardware(true, true, true, true, true, false, true, false, 100);
     ElapsedTime runtime = new ElapsedTime();
 
     String stepMove = "To Goal Line";
