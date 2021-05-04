@@ -445,9 +445,8 @@ public class LauncherHardware {
         double pastTime = (double)rpmBuffer[0].get(0);
 
         if(rpmBuffer[0].size() >= bufferSize){
-            rpmBuffer[0].remove(0);
-            launcher1RPM = launcherRPMCalc((double)rpmBuffer[1].remove(0), launcher1.getCurrentPosition(), pastTime, currTime);
-            launcher2RPM = launcherRPMCalc((double)rpmBuffer[2].remove(0), launcher2.getCurrentPosition(), pastTime, currTime);
+            launcher1RPM = launcherRPMCalc(rpmBuffer[1].remove(0), (double) launcher1.getCurrentPosition(), pastTime, currTime);
+            launcher2RPM = launcherRPMCalc(rpmBuffer[2].remove(0), (double) launcher2.getCurrentPosition(), pastTime, currTime);
         }else{
             launcher1RPM = -1;
             launcher2RPM = -1;

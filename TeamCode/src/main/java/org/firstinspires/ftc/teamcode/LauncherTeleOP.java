@@ -54,10 +54,13 @@ public class LauncherTeleOP extends LinearOpMode{
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
+            /** Drive Section */
+
             //Create a deadzone for the joysticks
             gamepad1.setJoystickDeadzone(deadzone);
             gamepad2.setJoystickDeadzone(deadzone);
 
+            //Calculate the necessary values for the drive motors
             double[][] drivePowah = robot.meccanumDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_y);
 
             //Send the scaled power levels to drive motors
