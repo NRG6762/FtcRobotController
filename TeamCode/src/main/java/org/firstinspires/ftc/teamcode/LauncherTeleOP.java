@@ -33,6 +33,16 @@ public class LauncherTeleOP extends LinearOpMode{
 
     private float deadzone = 0.025f;
 
+    private boolean newButton = true;
+    private double speed = 0;
+    private int index = 0;
+    double[] place = {0.1, 0.01, 0.001, 0.0001};
+
+    private boolean stickToggleL = true;
+    private boolean stickButtonL = true;
+    private boolean stickToggleR = true;
+    private boolean stickButtonR = true;
+
     @Override
     public void runOpMode() {
 
@@ -54,14 +64,14 @@ public class LauncherTeleOP extends LinearOpMode{
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
-            /** Drive Section */
+            //Drive Control
 
             //Create a deadzone for the joysticks
             gamepad1.setJoystickDeadzone(deadzone);
             gamepad2.setJoystickDeadzone(deadzone);
 
             //Calculate the necessary values for the drive motors
-            double[][] drivePowah = robot.meccanumDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_y);
+            double[][] drivePowah = robot.meccanumDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             //Send the scaled power levels to drive motors
             robot.leftFront.setPower(drivePowah[0][0]);
@@ -69,10 +79,79 @@ public class LauncherTeleOP extends LinearOpMode{
             robot.leftBack.setPower(drivePowah[0][2]);
             robot.rightBack.setPower(drivePowah[0][3]);
 
-            double[] rpm = robot.launcherRPM(runtime.milliseconds());
+            //Flywheel Control
 
-            telemetry.addData("Launcher 1 RPM", rpm[1]);
-            telemetry.addData("Launcher 2 RPM", rpm[2]);
+            if(newButton){
+                if(gamepad2.dpad_up){
+                    speed += place[index];
+                    newButton = false;
+                }else if(gamepad2.dpad_down){
+                    speed -= place[index];
+                    newButton = false;
+                }else if(gamepad2.dpad_right){
+                    index++;
+                    newButton = false;
+                }else if(gamepad2.dpad_left){
+                    index--;
+                    newButton = false;
+                }
+            }
+
+            if(!gamepad2.dpad_up && !gamepad2.dpad_down && !gamepad2.dpad_right && !gamepad2.dpad_left && !gamepad2.right_bumper && !gamepad2.left_bumper){
+                newButton = true;
+            }
+
+            if(speed > 1.0){
+                speed = 1.0;
+            }else if(speed < -1.0){
+                speed = -1.0;
+            }
+
+            if(index > 3){
+                index = 0;
+            }else if(index < 0){
+                index = 3;
+            }
+
+            robot.launcherSpeed(speed);
+
+            telemetry.addData("Place", place[index]);
+            telemetry.addData("Launcher Speed", speed);
+
+            //Conveyor Control
+
+            if(gamepad2.right_stick_button){
+                stickButtonR = false;
+                stickToggleR = !stickToggleR;
+            }else{
+                stickButtonR = true;
+            }
+
+            if(stickToggleR && gamepad2.right_stick_y <= 1 && gamepad2.right_stick_y >= -1 ){
+                robot.conveyor.setPower(-gamepad2.right_stick_y);
+            }
+
+            if(gamepad2.left_stick_button){
+                stickButtonL = false;
+                stickToggleL = !stickToggleL;
+            }else{
+                stickButtonL = true;
+            }
+
+            if(stickToggleL && gamepad2.left_stick_y <= 1 && gamepad2.left_stick_y >= -1){
+                robot.collector.setPower(-gamepad2.left_stick_y);
+            }
+
+            telemetry.addData("Conveyor Speed", robot.conveyor.getPower());
+            telemetry.addData("Collector Speed", robot.collector.getPower());
+
+            //Grabber Wheels Control
+
+            if(gamepad2.a){
+                robot.grabber.setPower(0.0);
+            }else if(gamepad2.b){
+                robot.grabber.setPower(1.0);
+            }
 
             telemetry.update();
 

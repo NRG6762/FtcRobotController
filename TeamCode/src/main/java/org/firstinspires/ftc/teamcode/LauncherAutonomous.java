@@ -27,9 +27,9 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     LauncherHardware robot = new LauncherHardware(true, true, true, true, true, true,false, true, false, 100);
     ElapsedTime runtime = new ElapsedTime();
 
-    String stepMove = "To Goal Line";
+    String stepMove = "Emerge";
     boolean firstMove = true;
-    String stepShoot = "Up To Speed";
+    String stepShoot = "Standby";
     boolean firstShoot = true;
     String stepCollect = "Off";
     boolean firstCollect = true;
@@ -37,6 +37,8 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     boolean firstGrab = true;
     String stepVuforia = "On";
     boolean firstVuforia = true;
+
+    int tickSnapshot = 0;
 
     int ringNumber = 0;
 
@@ -116,26 +118,47 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         }
     }
 
-    boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos, double endPos){
+    boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos){
 
-        double power = motorCurve((currPos - startPos) / (endPos - startPos));
+        double power = motorCurve((double)(currPos - startPos) / distance);
 
         if(power <= 0.01){
 
-            robot.leftFront.setPower(0.0);
-            robot.rightFront.setPower(0.0);
-            robot.leftBack.setPower(0.0);
-            robot.rightBack.setPower(0.0);
+            stopMotors();
 
             return true;
 
-        }else {
+        }else{
 
             autoMeccanumDrive(power, direction, 0);
 
             return false;
 
         }
+    }
+
+    boolean smoothMeccanumDrive(double distance, double direction, double startPos, double currPos, double power){
+
+        if((double)(currPos - startPos) / distance >= 0.99){
+
+            stopMotors();
+
+            return true;
+
+        }else{
+
+            autoMeccanumDrive(power, direction, 0);
+
+            return false;
+
+        }
+    }
+
+    void stopMotors(){
+        robot.leftFront.setPower(0.0);
+        robot.rightFront.setPower(0.0);
+        robot.leftBack.setPower(0.0);
+        robot.rightBack.setPower(0.0);
     }
 
     void autoMeccanumDrive(double speed, double direction, double spin){
@@ -169,7 +192,16 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     }
 
     double motorCurve(double currPos){
-        return 
+        if(currPos < .2){
+            return 1.0 - 20 * (.2 - currPos) * (.2 - currPos);
+        }else if(currPos <.6){
+            return 1.0;
+        }else if(currPos < .8){
+            return 1.0 - 12 * (.6 - currPos) * (.6 - currPos);
+        }else if(currPos < 1.0){
+            return 13 * (1 - currPos) * (1 - currPos);
+        }
+        return 0.0;
     }
 
 }

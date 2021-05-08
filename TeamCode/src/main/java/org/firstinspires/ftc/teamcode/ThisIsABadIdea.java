@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,7 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Feel free to make any changes and use at your disposal.
  */
 @TeleOp(name="This Is A Bad Idea", group="@Testing")
-//@Disabled
+@Disabled
 public class ThisIsABadIdea extends LinearOpMode{
 
     private LauncherHardware robot = new LauncherHardware(false, true, true, true, true, true, false, false, false, 100);

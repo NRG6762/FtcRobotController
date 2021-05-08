@@ -78,8 +78,8 @@ public class LauncherHardware {
     public ArrayList[]              rpmBuffer;
 
     //Declare Launcher Motor Values
-    public double                   maxRPM              = 0.8;
-    public double                   standbyRPM          = 0.2;
+    public double                   launchPower         = 0.2;
+    public double                   standbyPower        = 0.05;
     public double                   ticksPerRevolution  = 28;
     public double                   gearbox             = 1;
 
@@ -95,7 +95,7 @@ public class LauncherHardware {
     public boolean                  grabberTrue         = true;
     public CRServo                  grabber             = null;
 
-    public double grabberZero                           = 0.74;
+    public double                   grabberZero         = 0.0;
 
     //Declare Aimer Servo/Activator
     public boolean                  aimerTrue           = false;
@@ -213,8 +213,8 @@ public class LauncherHardware {
             launcher2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             //Set Launcher Motor Modes
-            launcher1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            launcher2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            launcher1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            launcher2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             //Set Launcher Motor Directions
             launcher1.setDirection(DcMotorSimple.Direction.FORWARD);
