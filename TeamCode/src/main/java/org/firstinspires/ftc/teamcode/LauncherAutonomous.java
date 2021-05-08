@@ -116,22 +116,27 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         }
     }
 
-    private double motorCurve(double startTicks, double currTicks, double goalTicks, double maxPower){
+    boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos, double endPos){
 
-        double rangeTicks = goalTicks - startTicks;
+        double power = motorCurve((currPos - startPos) / (endPos - startPos));
 
-        double shiftedCurrTicks = currTicks - startTicks;
+        if(power <= 0.01){
 
-        double curve = -4 * maxPower * (shiftedCurrTicks - rangeTicks) * (shiftedCurrTicks + 0.05 * rangeTicks) / (rangeTicks * rangeTicks);
+            robot.leftFront.setPower(0.0);
+            robot.rightFront.setPower(0.0);
+            robot.leftBack.setPower(0.0);
+            robot.rightBack.setPower(0.0);
 
-        if(curve >= 1){
-            curve = 1;
+            return true;
+
+        }else {
+
+            autoMeccanumDrive(power, direction, 0);
+
+            return false;
+
         }
-
-        return curve;
-
     }
-
 
     void autoMeccanumDrive(double speed, double direction, double spin){
 
@@ -161,6 +166,10 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         robot.leftBack.setPower(drive3/scale);
         robot.rightBack.setPower(drive4/scale);
 
+    }
+
+    double motorCurve(double currPos){
+        return 
     }
 
 }
