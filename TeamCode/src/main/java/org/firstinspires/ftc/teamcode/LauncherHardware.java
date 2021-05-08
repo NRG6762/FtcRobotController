@@ -52,6 +52,7 @@ public class LauncherHardware {
     public boolean                  launcherActive;
     public boolean                  conveyorActive;
     public boolean                  collectorActive;
+    public boolean                  grabberActive;
     public boolean                  aimerActive;
     public boolean                  IMUActive;
     public boolean                  distanceActive;
@@ -87,9 +88,14 @@ public class LauncherHardware {
     public DcMotor                  conveyor            = null;
 
     //Declare Aimer Servo/Activator
-    public boolean                  collectorTrue       = false;
-    public CRServo                  collector1          = null;
-    public CRServo                  collector2          = null;
+    public boolean                  collectorTrue       = true;
+    public DcMotor                  collector           = null;
+
+    //Declare Aimer Servo/Activator
+    public boolean                  grabberTrue         = true;
+    public CRServo                  grabber             = null;
+
+    public double grabberZero                           = 0.74;
 
     //Declare Aimer Servo/Activator
     public boolean                  aimerTrue           = false;
@@ -141,12 +147,13 @@ public class LauncherHardware {
     private ElapsedTime period  = new ElapsedTime();
 
     //Constructor
-    public LauncherHardware(boolean visionActive, boolean driveActive, boolean launcherActive, boolean conveyorActive, boolean collectorActive, boolean aimerActive, boolean IMUActive, boolean distanceActive, double bufferSize){
+    public LauncherHardware(boolean visionActive, boolean driveActive, boolean launcherActive, boolean conveyorActive, boolean collectorActive, boolean grabberActive, boolean aimerActive, boolean IMUActive, boolean distanceActive, double bufferSize){
         this.visionActive = visionActive;
         this.driveActive = driveActive;
         this.launcherActive = launcherActive;
         this.conveyorActive = conveyorActive;
         this.collectorActive = collectorActive;
+        this.grabberActive = grabberActive;
         this.aimerActive = aimerActive;
         this.IMUActive = IMUActive;
         this.distanceActive = distanceActive;
@@ -238,27 +245,41 @@ public class LauncherHardware {
             conveyor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //Set Conveyor Motor Direction
-            conveyor.setDirection(DcMotorSimple.Direction.FORWARD);
+            conveyor.setDirection(DcMotorSimple.Direction.REVERSE);
 
             //Set Conveyor Motor Power
-            //conveyor.setPower(0.0);
+            conveyor.setPower(0.0);
 
         }
 
-        /** Collector Servo Initialization */
+        /** Collector Motor Initialization */
         if (collectorTrue && collectorActive) {
 
-            //Get Collector Servo
-            collector1 = ahwMap.crservo.get("collector_1");
-            collector2 = ahwMap.crservo.get("collector_2");
+            //Get Collector Motor
+            collector = ahwMap.dcMotor.get("collector");
 
-            //Set Collector Servo Direction
-            collector1.setDirection(DcMotorSimple.Direction.FORWARD);
-            collector2.setDirection(DcMotorSimple.Direction.REVERSE);
+            //Set Conveyor Motor Mode
+            collector.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            //Set Collector Servo Power
-            collector1.setPower(0.0);
-            collector2.setPower(0.0);
+            //Set Conveyor Motor Direction
+            collector.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            //Set Conveyor Motor Power
+            collector.setPower(0.0);
+
+        }
+
+        /** Collector Motor Initialization */
+        if (grabberTrue && grabberActive) {
+
+            //Get Collector Motor
+            grabber = ahwMap.crservo.get("grabber");
+
+            //Set Conveyor Motor Mode
+            grabber.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            //Set Conveyor Motor Power
+            grabber.setPower(grabberZero);
 
         }
 
@@ -401,36 +422,6 @@ public class LauncherHardware {
 
         //Output all of the variables and values created (usable wheel power in [0])
         return output;
-
-    }
-
-    void autoMeccanumDrive(double speed, double direction, double spin){
-
-        double drive1 = speed * Math.sin(direction + (Math.PI/4)) + spin;
-        double drive2 = speed * Math.cos(direction + (Math.PI/4)) - spin;
-        double drive3 = speed * Math.cos(direction + (Math.PI/4)) + spin;
-        double drive4 = speed * Math.sin(direction + (Math.PI/4)) - spin;
-
-        //Set maxValue to the absolute value of first power level
-        double scale = Math.abs(drive1);
-
-        //If the absolute value of the second power level is less than the maxValue, make it the new maxValue
-        if (Math.abs(drive2) > scale) scale = Math.abs(drive2);
-
-        //If the absolute value of the third power level is less than the maxValue, make it the new maxValue
-        if (Math.abs(drive3) > scale) scale = Math.abs(drive3);
-
-        //If the absolute value of the fourth power level is less than the maxValue, make it the new maxValue
-        if (Math.abs(drive4) > scale) scale = Math.abs(drive4);
-
-        //Check if need to scale -- if not set maxValue to 1 to nullify scaling
-        if (scale < 1) scale = 1;
-
-        //Apply the scale to the outputs for each wheel (final values)
-        leftFront.setPower(drive1/scale);
-        rightFront.setPower(drive2/scale);
-        leftBack.setPower(drive3/scale);
-        rightBack.setPower(drive4/scale);
 
     }
 

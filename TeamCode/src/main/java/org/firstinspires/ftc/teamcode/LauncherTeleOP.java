@@ -27,7 +27,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 //@Disabled
 public class LauncherTeleOP extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(false, true, true, true, true, false, true, false, 100);
+    private LauncherHardware robot = new LauncherHardware(false, true, true, true, true, true,false, true, false, 100);
 
     private ElapsedTime runtime = new ElapsedTime();
 

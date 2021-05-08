@@ -24,7 +24,7 @@ import java.util.List;
 //@Disabled
 public abstract class LauncherAutonomous extends LinearOpMode {
 
-    LauncherHardware robot = new LauncherHardware(true, true, true, true, true, false, true, false, 100);
+    LauncherHardware robot = new LauncherHardware(true, true, true, true, true, true,false, true, false, 100);
     ElapsedTime runtime = new ElapsedTime();
 
     String stepMove = "To Goal Line";
@@ -93,8 +93,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
-            double[] rpm = robot.launcherRPM(runtime.milliseconds());
-
             loopBody();
 
         }
@@ -116,6 +114,53 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
         switch (stepVuforia) {
         }
+    }
+
+    private double motorCurve(double startTicks, double currTicks, double goalTicks, double maxPower){
+
+        double rangeTicks = goalTicks - startTicks;
+
+        double shiftedCurrTicks = currTicks - startTicks;
+
+        double curve = -4 * maxPower * (shiftedCurrTicks - rangeTicks) * (shiftedCurrTicks + 0.05 * rangeTicks) / (rangeTicks * rangeTicks);
+
+        if(curve >= 1){
+            curve = 1;
+        }
+
+        return curve;
+
+    }
+
+
+    void autoMeccanumDrive(double speed, double direction, double spin){
+
+        double drive1 = speed * Math.sin(direction + (Math.PI/4)) + spin;
+        double drive2 = speed * Math.cos(direction + (Math.PI/4)) - spin;
+        double drive3 = speed * Math.cos(direction + (Math.PI/4)) + spin;
+        double drive4 = speed * Math.sin(direction + (Math.PI/4)) - spin;
+
+        //Set maxValue to the absolute value of first power level
+        double scale = Math.abs(drive1);
+
+        //If the absolute value of the second power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive2) > scale) scale = Math.abs(drive2);
+
+        //If the absolute value of the third power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive3) > scale) scale = Math.abs(drive3);
+
+        //If the absolute value of the fourth power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive4) > scale) scale = Math.abs(drive4);
+
+        //Check if need to scale -- if not set maxValue to 1 to nullify scaling
+        if (scale < 1) scale = 1;
+
+        //Apply the scale to the outputs for each wheel (final values)
+        robot.leftFront.setPower(drive1/scale);
+        robot.rightFront.setPower(drive2/scale);
+        robot.leftBack.setPower(drive3/scale);
+        robot.rightBack.setPower(drive4/scale);
+
     }
 
 }
