@@ -118,4 +118,60 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         }
     }
 
+    boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos, double endPos){
+
+        double power = motorCurve((currPos - startPos) / (endPos - startPos));
+
+        if(power <= 0.01){
+
+            robot.leftFront.setPower(0.0);
+            robot.rightFront.setPower(0.0);
+            robot.leftBack.setPower(0.0);
+            robot.rightBack.setPower(0.0);
+
+            return true;
+
+        }else {
+
+            autoMeccanumDrive(power, direction, 0);
+
+            return false;
+
+        }
+    }
+
+    void autoMeccanumDrive(double speed, double direction, double spin){
+
+        double drive1 = speed * Math.sin(direction + (Math.PI/4)) + spin;
+        double drive2 = speed * Math.cos(direction + (Math.PI/4)) - spin;
+        double drive3 = speed * Math.cos(direction + (Math.PI/4)) + spin;
+        double drive4 = speed * Math.sin(direction + (Math.PI/4)) - spin;
+
+        //Set maxValue to the absolute value of first power level
+        double scale = Math.abs(drive1);
+
+        //If the absolute value of the second power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive2) > scale) scale = Math.abs(drive2);
+
+        //If the absolute value of the third power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive3) > scale) scale = Math.abs(drive3);
+
+        //If the absolute value of the fourth power level is less than the maxValue, make it the new maxValue
+        if (Math.abs(drive4) > scale) scale = Math.abs(drive4);
+
+        //Check if need to scale -- if not set maxValue to 1 to nullify scaling
+        if (scale < 1) scale = 1;
+
+        //Apply the scale to the outputs for each wheel (final values)
+        robot.leftFront.setPower(drive1/scale);
+        robot.rightFront.setPower(drive2/scale);
+        robot.leftBack.setPower(drive3/scale);
+        robot.rightBack.setPower(drive4/scale);
+
+    }
+
+    double motorCurve(double currPos){
+        return 
+    }
+
 }

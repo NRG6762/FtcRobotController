@@ -404,36 +404,6 @@ public class LauncherHardware {
 
     }
 
-    void autoMeccanumDrive(double speed, double direction, double spin){
-
-        double drive1 = speed * Math.sin(direction + (Math.PI/4)) + spin;
-        double drive2 = speed * Math.cos(direction + (Math.PI/4)) - spin;
-        double drive3 = speed * Math.cos(direction + (Math.PI/4)) + spin;
-        double drive4 = speed * Math.sin(direction + (Math.PI/4)) - spin;
-
-        //Set maxValue to the absolute value of first power level
-        double scale = Math.abs(drive1);
-
-        //If the absolute value of the second power level is less than the maxValue, make it the new maxValue
-        if (Math.abs(drive2) > scale) scale = Math.abs(drive2);
-
-        //If the absolute value of the third power level is less than the maxValue, make it the new maxValue
-        if (Math.abs(drive3) > scale) scale = Math.abs(drive3);
-
-        //If the absolute value of the fourth power level is less than the maxValue, make it the new maxValue
-        if (Math.abs(drive4) > scale) scale = Math.abs(drive4);
-
-        //Check if need to scale -- if not set maxValue to 1 to nullify scaling
-        if (scale < 1) scale = 1;
-
-        //Apply the scale to the outputs for each wheel (final values)
-        leftFront.setPower(drive1/scale);
-        rightFront.setPower(drive2/scale);
-        leftBack.setPower(drive3/scale);
-        rightBack.setPower(drive4/scale);
-
-    }
-
     public double[] launcherRPM(double currTime){
 
         rpmBuffer[0].add(currTime);
@@ -445,8 +415,8 @@ public class LauncherHardware {
         double pastTime = (double)rpmBuffer[0].get(0);
 
         if(rpmBuffer[0].size() >= bufferSize){
-            launcher1RPM = launcherRPMCalc(rpmBuffer[1].remove(0), (double) launcher1.getCurrentPosition(), pastTime, currTime);
-            launcher2RPM = launcherRPMCalc(rpmBuffer[2].remove(0), (double) launcher2.getCurrentPosition(), pastTime, currTime);
+            launcher1RPM = launcherRPMCalc((double)rpmBuffer[1].remove(0), (double) launcher1.getCurrentPosition(), pastTime, currTime);
+            launcher2RPM = launcherRPMCalc((double)rpmBuffer[2].remove(0), (double) launcher2.getCurrentPosition(), pastTime, currTime);
         }else{
             launcher1RPM = -1;
             launcher2RPM = -1;
