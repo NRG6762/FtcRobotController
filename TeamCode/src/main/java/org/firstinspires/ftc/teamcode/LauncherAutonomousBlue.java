@@ -27,7 +27,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(12 * robot.ticksPerInchSide, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(12 * robot.ticksPerInchSide, Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Go Forth";
                     firstMove = true;
                 }
@@ -42,7 +42,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(24 * robot.ticksPerInchFront, Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(24 * robot.ticksPerInchFront, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Smooth Across";
                     firstMove = true;
                 }
@@ -52,13 +52,15 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
             case "Smooth Across":
 
                 if(firstMove){
-                    tickSnapshot = robot.leftFront.getCurrentPosition();
+                    tickSnapshot = robot.rightFront.getCurrentPosition();
+                    stepCollect = "Half It";
                     firstMove = false;
                 }
 
-                if(smoothMeccanumDrive(12 * robot.ticksPerInchSide, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition(), 0.2)){
+                if(smoothMeccanumDrive(12 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.rightFront.getCurrentPosition(), 0.2)){
                     stepMove = "Make Room";
                     stepShoot = "Standby";
+                    stepCollect = "Off";
                     firstMove = true;
                 }
 
@@ -71,7 +73,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(12 * robot.ticksPerInchFront, Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(12 * robot.ticksPerInchFront, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Reorient";
                     firstMove = true;
                 }
@@ -81,11 +83,11 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
             case "Reorient":
 
                 if(firstMove){
-                    tickSnapshot = robot.leftFront.getCurrentPosition();
+                    tickSnapshot = robot.rightFront.getCurrentPosition();
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(6 * robot.ticksPerInchSide, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(6 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.rightFront.getCurrentPosition())){
                     stepMove = "Back Up";
                     stepShoot = "Launch";
                     firstMove = true;
@@ -96,12 +98,15 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
             case "Back Up":
 
                 if(firstMove){
-                    tickSnapshot = robot.leftFront.getCurrentPosition();
+                    tickSnapshot = -robot.rightBack.getCurrentPosition();
+                    stepCollect = "Run It";
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(18 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(smoothMeccanumDrive(18 * robot.ticksPerInchFront, Math.PI, tickSnapshot, -robot.rightBack.getCurrentPosition(), 0.2)){
                     stepMove = "To Park";
+                    stepShoot = "Standby";
+                    stepCollect = "Off";
                     firstMove = true;
                 }
 
@@ -115,7 +120,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(12 * robot.ticksPerInchSide, Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(12 * robot.ticksPerInchSide, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Park";
                     firstMove = true;
                 }
@@ -154,7 +159,22 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
 
             case "Run It":
 
-                robot.launcherSpeed(0.0);
+                robot.conveyor.setPower(1);
+                robot.collector.setPower(1);
+
+                break;
+
+            case "Half It":
+
+                robot.conveyor.setPower(1);
+                robot.collector.setPower(0);
+
+                break;
+
+            case "Off":
+
+                robot.conveyor.setPower(0);
+                robot.collector.setPower(0);
 
                 break;
 
@@ -165,6 +185,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
 
         switch (stepVuforia) {
         }
+
     }
 
 }

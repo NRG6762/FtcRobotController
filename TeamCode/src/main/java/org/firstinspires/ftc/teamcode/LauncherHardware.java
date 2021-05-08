@@ -53,6 +53,7 @@ public class LauncherHardware {
     public boolean                  conveyorActive;
     public boolean                  collectorActive;
     public boolean                  grabberActive;
+    public boolean                  wobbleActive;
     public boolean                  aimerActive;
     public boolean                  IMUActive;
     public boolean                  distanceActive;
@@ -66,8 +67,8 @@ public class LauncherHardware {
     public DcMotor                  rightBack           = null;
 
     //Declare Drive Motor Values
-    public double                   ticksPerInchFront   = 60;
-    public double                   ticksPerInchSide    = 70;
+    public double                   ticksPerInchFront   = 120;
+    public double                   ticksPerInchSide    = 160;
 
     //Declare Launcher Motors/Activator
     public boolean                  launcherDriveTrue   = true;
@@ -78,8 +79,8 @@ public class LauncherHardware {
     public ArrayList[]              rpmBuffer;
 
     //Declare Launcher Motor Values
-    public double                   launchPower         = 0.2;
-    public double                   standbyPower        = 0.05;
+    public double                   launchPower         = 0.9;
+    public double                   standbyPower        = 0.0;
     public double                   ticksPerRevolution  = 28;
     public double                   gearbox             = 1;
 
@@ -96,6 +97,12 @@ public class LauncherHardware {
     public CRServo                  grabber             = null;
 
     public double                   grabberZero         = 0.0;
+
+    public boolean                  wobbleTrue          = true;
+    public Servo                    wobble              = null;
+
+    public double                   wobbleOpen          = 0.0;
+    public double                   wobbleClosed        = 0.0;
 
     //Declare Aimer Servo/Activator
     public boolean                  aimerTrue           = false;
@@ -281,6 +288,15 @@ public class LauncherHardware {
             //Set Conveyor Motor Power
             grabber.setPower(grabberZero);
 
+        }
+
+        /** Collector Motor Initialization */
+        if (wobbleTrue && wobbleActive) {
+
+            //Get Collector Motor
+            wobble = ahwMap.servo.get("wobble");
+
+            wobble.setPosition(wobbleClosed);
         }
 
         /** IMU Initialization */

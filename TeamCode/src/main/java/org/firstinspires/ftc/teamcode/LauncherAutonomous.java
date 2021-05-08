@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.nio.DoubleBuffer;
@@ -39,6 +42,8 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     boolean firstVuforia = true;
 
     int tickSnapshot = 0;
+    double initHeading = 0;
+    double shootTime = 0;
 
     int ringNumber = 0;
 
@@ -50,6 +55,8 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
         //Signify the Hardware Map has been initialized
         telemetry.addData("Status", "Initialized");
+
+        initHeading = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS).firstAngle;
 
         //Activate TensorFlow Object Detection
         if (robot.tfod != null) robot.tfod.activate();
@@ -97,6 +104,13 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
             loopBody();
 
+            telemetry.addData("Step Move", stepMove);
+            telemetry.addData("Step Shoot", stepShoot);
+            telemetry.addData("Step Collect", stepCollect);
+            telemetry.addData("Step Grab", stepGrab);
+
+            telemetry.update();
+
         }
 
     }
@@ -121,6 +135,8 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos){
 
         double power = motorCurve((double)(currPos - startPos) / distance);
+
+        //direction = direction - Math.PI / 2;
 
         if(power <= 0.01){
 
@@ -163,6 +179,8 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
     void autoMeccanumDrive(double speed, double direction, double spin){
 
+        spin += robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS).firstAngle - initHeading;
+
         double drive1 = speed * Math.sin(direction + (Math.PI/4)) + spin;
         double drive2 = speed * Math.cos(direction + (Math.PI/4)) - spin;
         double drive3 = speed * Math.cos(direction + (Math.PI/4)) + spin;
@@ -197,9 +215,9 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         }else if(currPos <.6){
             return 1.0;
         }else if(currPos < .8){
-            return 1.0 - 12 * (.6 - currPos) * (.6 - currPos);
+            return 1.0 - 12.5 * (.6 - currPos) * (.6 - currPos);
         }else if(currPos < 1.0){
-            return 13 * (1 - currPos) * (1 - currPos);
+            return 12.5 * (1 - currPos) * (1 - currPos);
         }
         return 0.0;
     }
