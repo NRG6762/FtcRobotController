@@ -183,8 +183,6 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
         switch (stepGrab) {
         }
 
-        switch (stepVuforia) {
-        }
 
     }
 

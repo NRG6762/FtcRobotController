@@ -38,8 +38,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     boolean firstCollect = true;
     String stepGrab = "Off";
     boolean firstGrab = true;
-    String stepVuforia = "On";
-    boolean firstVuforia = true;
 
     int tickSnapshot = 0;
     double initHeading = 0;
@@ -96,9 +94,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         //Deactivate TensorFlow Object Detection
         if (robot.tfod != null) robot.tfod.shutdown();
 
-        //Activate the vision stuff
-        robot.targetsUltimateGoal.activate();
-
         //Run until the end of the match (driver presses STOP)
         while (!isStopRequested()) {
 
@@ -128,8 +123,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
         switch (stepGrab) {
         }
 
-        switch (stepVuforia) {
-        }
     }
 
     boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos){
@@ -212,12 +205,12 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     double motorCurve(double currPos){
         if(currPos < .2){
             return 1.0 - 20 * (.2 - currPos) * (.2 - currPos);
-        }else if(currPos <.6){
+        }else if(currPos <= .6){
             return 1.0;
-        }else if(currPos < .8){
-            return 1.0 - 12.5 * (.6 - currPos) * (.6 - currPos);
+        }else if(currPos < .9){
+            return 1.0 - 50 * (.8 - currPos) * (.8 - currPos);
         }else if(currPos < 1.0){
-            return 12.5 * (1 - currPos) * (1 - currPos);
+            return 50 * (1 - currPos) * (1 - currPos);
         }
         return 0.0;
     }
