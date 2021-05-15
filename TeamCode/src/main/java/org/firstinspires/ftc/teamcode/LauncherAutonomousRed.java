@@ -20,15 +20,6 @@ public class LauncherAutonomousRed extends LauncherAutonomous {
         switch (stepMove) {
         }
 
-        switch (stepShoot) {
-        }
-
-        switch (stepCollect) {
-        }
-
-        switch (stepGrab) {
-        }
-
     }
 
 }

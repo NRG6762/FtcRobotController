@@ -64,8 +64,8 @@ public class LauncherHardware {
     public DcMotor                  rightBack           = null;
 
     //Declare Drive Motor Values
-    public double                   ticksPerInchFront   = 120;
-    public double                   ticksPerInchSide    = 160;
+    public double                   ticksPerInchFront   = 95;
+    public double                   ticksPerInchSide    = 120;
 
     //Declare Launcher Motors/Activator
     public boolean                  launcherDriveTrue   = true;
