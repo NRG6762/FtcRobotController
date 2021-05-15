@@ -29,8 +29,6 @@ public class LauncherAutonomousRed extends LauncherAutonomous {
         switch (stepGrab) {
         }
 
-        switch (stepVuforia) {
-        }
     }
 
 }

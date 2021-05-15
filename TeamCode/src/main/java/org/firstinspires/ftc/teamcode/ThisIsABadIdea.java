@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Disabled
 public class ThisIsABadIdea extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(false, true, true, true, true, true, false, false, false, 100);
+    private LauncherHardware robot = new LauncherHardware(false, true, true, true, true, true, false, false);
 
     private ElapsedTime runtime = new ElapsedTime();
 

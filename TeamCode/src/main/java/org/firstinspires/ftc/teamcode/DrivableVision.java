@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 //@Disabled
 public class DrivableVision extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(true, true, false, false, false, false,false, false, false, 100);
+    private LauncherHardware robot = new LauncherHardware(true, true, false, false, false, false,false, false);
 
     private ElapsedTime runtime = new ElapsedTime();
 

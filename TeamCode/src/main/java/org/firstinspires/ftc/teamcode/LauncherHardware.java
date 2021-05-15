@@ -54,10 +54,7 @@ public class LauncherHardware {
     public boolean                  collectorActive;
     public boolean                  grabberActive;
     public boolean                  wobbleActive;
-    public boolean                  aimerActive;
     public boolean                  IMUActive;
-    public boolean                  distanceActive;
-    public double                   bufferSize;
 
     //Declare Drive Motors & Activator
     public boolean                  driveMotorsTrue     = true;
@@ -88,34 +85,28 @@ public class LauncherHardware {
     public boolean                  conveyorTrue        = true;
     public DcMotor                  conveyor            = null;
 
-    //Declare Aimer Servo/Activator
+    //Declare Collector Servo/Activator
     public boolean                  collectorTrue       = true;
     public DcMotor                  collector           = null;
 
-    //Declare Aimer Servo/Activator
+    //Declare Collector Servo/Activator
     public boolean                  grabberTrue         = true;
     public CRServo                  grabber             = null;
 
+    //Declare Grabber Motor Values
     public double                   grabberZero         = 0.0;
 
+    //Declare Wobble Servo/Activator
     public boolean                  wobbleTrue          = true;
     public Servo                    wobble              = null;
 
-    public double                   wobbleOpen          = 0.0;
+    //Declare Woblle Motor Values
+    public double                   wobbleOpen          = 0.45;
     public double                   wobbleClosed        = 0.0;
-
-    //Declare Aimer Servo/Activator
-    public boolean                  aimerTrue           = false;
-    public Servo                    aimer               = null;
 
     //Declare IMU/Activator
     public boolean                  imuTrue             = true;
     public BNO055IMU                imu                 = null;
-
-    //Declare Distance Sensors/Activator
-    public boolean                  distanceTrue        = false;
-    public DistanceSensor           distanceSide        = null;
-    public DistanceSensor           distanceFront       = null;
 
     //Declare Vision Sensors/Objects/Activator
     public Boolean                  visionTrue          = true;
@@ -154,17 +145,15 @@ public class LauncherHardware {
     private ElapsedTime period  = new ElapsedTime();
 
     //Constructor
-    public LauncherHardware(boolean visionActive, boolean driveActive, boolean launcherActive, boolean conveyorActive, boolean collectorActive, boolean grabberActive, boolean aimerActive, boolean IMUActive, boolean distanceActive, double bufferSize){
+    public LauncherHardware(boolean visionActive, boolean driveActive, boolean launcherActive, boolean conveyorActive, boolean collectorActive, boolean grabberActive, boolean wobbleActive, boolean IMUActive){
         this.visionActive = visionActive;
         this.driveActive = driveActive;
         this.launcherActive = launcherActive;
         this.conveyorActive = conveyorActive;
         this.collectorActive = collectorActive;
         this.grabberActive = grabberActive;
-        this.aimerActive = aimerActive;
+        this.wobbleActive = wobbleActive;
         this.IMUActive = IMUActive;
-        this.distanceActive = distanceActive;
-        this.bufferSize = bufferSize;
     }
 
     //Initialize standard Hardware interfaces
@@ -318,15 +307,6 @@ public class LauncherHardware {
             imu.initialize(parameters);
         }
 
-        /** Distance Sensor Initialization */
-        if (distanceTrue && distanceActive) {
-
-            //Get Distance Sensor
-            distanceSide = ahwMap.get(DistanceSensor.class, "distance_side");
-            distanceFront = ahwMap.get(DistanceSensor.class, "distance_front");
-
-        }
-
         /** VUFORIA & TENSORFLOW */
         if (visionTrue && visionActive) {
 
@@ -451,7 +431,7 @@ public class LauncherHardware {
         double launcher2RPM;
         double pastTime = (double)rpmBuffer[0].get(0);
 
-        if(rpmBuffer[0].size() >= bufferSize){
+        if(rpmBuffer[0].size() >= 100){
             launcher1RPM = launcherRPMCalc((double)rpmBuffer[1].remove(0), (double) launcher1.getCurrentPosition(), pastTime, currTime);
             launcher2RPM = launcherRPMCalc((double)rpmBuffer[2].remove(0), (double) launcher2.getCurrentPosition(), pastTime, currTime);
         }else{

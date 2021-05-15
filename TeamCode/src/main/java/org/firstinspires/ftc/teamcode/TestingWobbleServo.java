@@ -13,11 +13,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@TeleOp(name="Testing Launcher Speed", group="@Testing")
+@TeleOp(name="Testing Wobble Position", group="@Testing")
 //@Disabled
-public class TestingLauncherSpeed extends LinearOpMode{
+public class TestingWobbleServo extends LinearOpMode{
 
-    private LauncherHardware robot = new LauncherHardware(false, false, true, true, true, true, false, false);
+    private LauncherHardware robot = new LauncherHardware(false, false, false, false, false, false, true, false);
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -71,8 +71,8 @@ public class TestingLauncherSpeed extends LinearOpMode{
 
             if(speed > 1.0){
                 speed = 1.0;
-            }else if(speed < -1.0){
-                speed = -1.0;
+            }else if(speed < 0.0){
+                speed = 0.0;
             }
 
             if(index > 3){
@@ -81,33 +81,10 @@ public class TestingLauncherSpeed extends LinearOpMode{
                 index = 3;
             }
 
-            robot.launcherSpeed(speed);
+            robot.wobble.setPosition(speed);
 
             telemetry.addData("Place", place[index]);
-            telemetry.addData("Launcher Speed", speed);
-
-            if(gamepad1.right_trigger < 1){
-                robot.conveyor.setPower(gamepad1.right_trigger);
-            }
-
-            if(gamepad1.left_trigger < 1){
-                robot.collector.setPower(gamepad1.left_trigger);
-            }
-
-            telemetry.addData("Conveyor Speed", gamepad1.right_trigger);
-            telemetry.addData("Collector Speed", gamepad1.left_trigger);
-
-            if(gamepad1.a){
-                robot.grabber.setPower(0.0);
-            }else if(gamepad1.b){
-                robot.grabber.setPower(robot.grabberZero);
-            }else if(gamepad1.y){
-                robot.grabber.setPower(1.0);
-            }
-
-            telemetry.addData("Grabber Wheels Speed", robot.grabber.getPower());
-
-
+            telemetry.addData("Position", speed);
 
             telemetry.update();
 
