@@ -32,12 +32,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
     String stepMove = "Emerge";
     boolean firstMove = true;
-    String stepShoot = "Standby";
-    boolean firstShoot = true;
-    String stepCollect = "Off";
-    boolean firstCollect = true;
-    String stepGrab = "Off";
-    boolean firstGrab = true;
 
     int tickSnapshot = 0;
     double initHeading = 0;
@@ -100,9 +94,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
             loopBody();
 
             telemetry.addData("Step Move", stepMove);
-            telemetry.addData("Step Shoot", stepShoot);
-            telemetry.addData("Step Collect", stepCollect);
-            telemetry.addData("Step Grab", stepGrab);
 
             telemetry.update();
 
@@ -113,16 +104,6 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     public void loopBody(){
         switch (stepMove) {
         }
-
-        switch (stepShoot) {
-        }
-
-        switch (stepCollect) {
-        }
-
-        switch (stepGrab) {
-        }
-
     }
 
     boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos){

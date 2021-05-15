@@ -101,8 +101,8 @@ public class LauncherHardware {
     public Servo                    wobble              = null;
 
     //Declare Woblle Motor Values
-    public double                   wobbleOpen          = 0.45;
-    public double                   wobbleClosed        = 0.0;
+    public double                   wobbleOpen          = 1.0;
+    public double                   wobbleClosed        = 0.4;
 
     //Declare IMU/Activator
     public boolean                  imuTrue             = true;
