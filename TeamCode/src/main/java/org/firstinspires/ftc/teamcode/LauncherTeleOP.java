@@ -34,9 +34,6 @@ public class LauncherTeleOP extends LinearOpMode{
     private float deadzone = 0.025f;
 
     private boolean newButton = true;
-    private double speed = 0;
-    private int index = 0;
-    double[] place = {0.1, 0.01, 0.001, 0.0001};
 
     private boolean stickToggleL = true;
     private boolean stickButtonL = true;
@@ -83,16 +80,16 @@ public class LauncherTeleOP extends LinearOpMode{
 
             if(newButton){
                 if(gamepad2.dpad_up){
-                    speed += place[index];
+                    robot.launcherSpeed(1.0);
                     newButton = false;
                 }else if(gamepad2.dpad_down){
-                    speed -= place[index];
-                    newButton = false;
-                }else if(gamepad2.dpad_right){
-                    index++;
+                    robot.launcherSpeed(0.0);
                     newButton = false;
                 }else if(gamepad2.dpad_left){
-                    index--;
+                    robot.launcherSpeed(0.9);
+                    newButton = false;
+                }else if(gamepad2.dpad_right){
+                    robot.launcherSpeed(0.8);
                     newButton = false;
                 }
             }
@@ -101,22 +98,7 @@ public class LauncherTeleOP extends LinearOpMode{
                 newButton = true;
             }
 
-            if(speed > 1.0){
-                speed = 1.0;
-            }else if(speed < -1.0){
-                speed = -1.0;
-            }
-
-            if(index > 3){
-                index = 0;
-            }else if(index < 0){
-                index = 3;
-            }
-
-            robot.launcherSpeed(speed);
-
-            telemetry.addData("Place", place[index]);
-            telemetry.addData("Launcher Speed", speed);
+            telemetry.addData("Launcher Speed", robot.launcher1.getPower());
 
             //Conveyor Control
 

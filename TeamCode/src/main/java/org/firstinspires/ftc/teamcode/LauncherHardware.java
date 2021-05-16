@@ -76,7 +76,7 @@ public class LauncherHardware {
     public ArrayList[]              rpmBuffer;
 
     //Declare Launcher Motor Values
-    public double                   launchPower         = 0.9;
+    public double                   launchPower         = 1.0;
     public double                   standbyPower        = 0.0;
     public double                   ticksPerRevolution  = 28;
     public double                   gearbox             = 1;
@@ -101,7 +101,7 @@ public class LauncherHardware {
     public Servo                    wobble              = null;
 
     //Declare Woblle Motor Values
-    public double                   wobbleOpen          = 1.0;
+    public double                   wobbleOpen          = 0.95;
     public double                   wobbleClosed        = 0.4;
 
     //Declare IMU/Activator

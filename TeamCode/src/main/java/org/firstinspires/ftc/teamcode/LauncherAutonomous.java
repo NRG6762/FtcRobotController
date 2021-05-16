@@ -34,6 +34,7 @@ public abstract class LauncherAutonomous extends LinearOpMode {
     boolean firstMove = true;
 
     int tickSnapshot = 0;
+    double timeSnapshot = 0.0;
     double initHeading = 0;
     double shootTime = 0;
 
@@ -95,6 +96,9 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
             telemetry.addData("Step Move", stepMove);
 
+            telemetry.addData("Left Front Position", robot.leftFront.getCurrentPosition());
+            telemetry.addData("Right Front Position", robot.rightFront.getCurrentPosition());
+
             telemetry.update();
 
         }
@@ -108,7 +112,7 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
     boolean curvedMeccanumDrive(double distance, double direction, double startPos, double currPos){
 
-        double power = motorCurve((double)(currPos - startPos) / distance);
+        double power = motorCurve(Math.abs((double)(currPos - startPos)) / distance);
 
         //direction = direction - Math.PI / 2;
 
@@ -129,7 +133,7 @@ public abstract class LauncherAutonomous extends LinearOpMode {
 
     boolean smoothMeccanumDrive(double distance, double direction, double startPos, double currPos, double power){
 
-        if((double)(currPos - startPos) / distance >= 0.99){
+        if(Math.abs((double)(currPos - startPos)) / distance >= 0.99){
 
             stopMotors();
 

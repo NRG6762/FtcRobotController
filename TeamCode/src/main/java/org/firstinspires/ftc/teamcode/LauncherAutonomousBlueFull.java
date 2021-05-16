@@ -6,14 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * NRG6762
  * Northwestern Regional 7 Gearheads
  * 2020-2021 Season - Ultimate Goal
- * Launcher Autonomous Blue Most
+ * Launcher Autonomous Blue FullS
  * Written by Aiden Maraia
  * Version: 04/12/2020
  * Feel free to make any changes and use at your disposal.
  */
-@Autonomous(name="Launcher Autonomous Blue Most", group="@Competition")
-//@Disabled
-public class LauncherAutonomousBlue extends LauncherAutonomous {
+@Autonomous(name="Launcher Autonomous Blue Full", group="@Competition")
+@Disabled
+public class LauncherAutonomousBlueFull extends LauncherAutonomous {
 
     @Override
     public void loopBody(){
@@ -42,7 +42,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(49 * robot.ticksPerInchFront, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(52 * robot.ticksPerInchFront, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Jerk Back";
                     firstMove = true;
                 }
@@ -56,7 +56,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(1 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(4 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Smooth Across";
                     firstMove = true;
                 }
@@ -71,12 +71,12 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(runtime.milliseconds() - 250 >= timeSnapshot){
+                if(runtime.milliseconds() - 650 >= timeSnapshot){
                     robot.conveyor.setPower(1.0);
                     robot.collector.setPower(1.0);
                 }
 
-                if(smoothMeccanumDrive(24 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition(), 0.35)){
+                if(smoothMeccanumDrive(24 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition(), 0.3)){
                     if(ringNumber == 1){
                         stepMove = "Forward B";
                     }else{
@@ -115,6 +115,20 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                 }
 
                 if(curvedMeccanumDrive(12 * robot.ticksPerInchSide, Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                    stepMove = "Back B";
+                    firstMove = true;
+                }
+
+                break;
+
+            case "Back B":
+
+                if(firstMove){
+                    tickSnapshot = robot.leftFront.getCurrentPosition();
+                    firstMove = false;
+                }
+
+                if(curvedMeccanumDrive(24 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Park";
                     firstMove = true;
                 }
@@ -134,9 +148,23 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     if(ringNumber == 4){
                         stepMove = "Forward C";
                     }else if(ringNumber == 0){
-                        robot.wobble.setPosition(robot.wobbleOpen);
-                        stepMove = "Right AC";
+                        stepMove = "Forward A";
                     }
+                    firstMove = true;
+                }
+
+                break;
+
+            case "Forward A":
+
+                if(firstMove){
+                    tickSnapshot = robot.leftFront.getCurrentPosition();
+                    firstMove = false;
+                }
+
+                if(curvedMeccanumDrive(12 * robot.ticksPerInchFront, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                    robot.wobble.setPosition(robot.wobbleOpen);
+                    stepMove = "Right AC";
                     firstMove = true;
                 }
 
@@ -167,23 +195,9 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                 if(curvedMeccanumDrive(36 * robot.ticksPerInchSide, Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     if(ringNumber == 4) {
                         stepMove = "Back C";
-                    }else if(ringNumber == 0){
-                        stepMove = "Forward A";
+                    }else{
+                        stepMove = "Park";
                     }
-                    firstMove = true;
-                }
-
-                break;
-
-            case "Forward A":
-
-                if(firstMove){
-                    tickSnapshot = robot.leftFront.getCurrentPosition();
-                    firstMove = false;
-                }
-
-                if(curvedMeccanumDrive(12 * robot.ticksPerInchFront, 0, tickSnapshot, robot.leftFront.getCurrentPosition())){
-                    stepMove = "Park";
                     firstMove = true;
                 }
 
@@ -196,8 +210,8 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(24 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
-                    stepMove = "Park";
+                if(smoothMeccanumDrive(48 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition(), 0.2)){
+                    stepMove = "To Park";
                     firstMove = true;
                 }
 
