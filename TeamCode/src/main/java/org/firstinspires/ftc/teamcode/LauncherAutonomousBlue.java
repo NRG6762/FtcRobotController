@@ -38,7 +38,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
 
                 if(firstMove){
                     tickSnapshot = robot.leftFront.getCurrentPosition();
-                    robot.launcherSpeed(robot.launchPower);
+                    robot.launcherSpeed(0.925);
                     firstMove = false;
                 }
 
@@ -56,7 +56,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(curvedMeccanumDrive(1 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
+                if(curvedMeccanumDrive(2 * robot.ticksPerInchFront, Math.PI, tickSnapshot, robot.leftFront.getCurrentPosition())){
                     stepMove = "Smooth Across";
                     firstMove = true;
                 }
@@ -71,12 +71,12 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
                     firstMove = false;
                 }
 
-                if(runtime.milliseconds() - 250 >= timeSnapshot){
+                if(runtime.milliseconds() - 150 >= timeSnapshot){
                     robot.conveyor.setPower(1.0);
                     robot.collector.setPower(1.0);
                 }
 
-                if(smoothMeccanumDrive(24 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition(), 0.35)){
+                if(smoothMeccanumDrive(24 * robot.ticksPerInchSide, -Math.PI / 2, tickSnapshot, robot.leftFront.getCurrentPosition(), 0.25)){
                     if(ringNumber == 1){
                         stepMove = "Forward B";
                     }else{
@@ -90,7 +90,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
 
                 break;
 
-                //Goal B
+            //Goal B
 
             case "Forward B":
 
@@ -121,7 +121,7 @@ public class LauncherAutonomousBlue extends LauncherAutonomous {
 
                 break;
 
-                //Goal A or C
+            //Goal A or C
 
             case "Left AC":
 
